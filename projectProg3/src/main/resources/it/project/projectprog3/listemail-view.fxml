@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.progettoprog3.ListemailView">
+    <children>
+        <TitledPane alignment="CENTER" animated="false" collapsible="false" expanded="false" layoutY="1.0"
+                    prefHeight="26.0" prefWidth="602.0" text="Posta elettronica">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+            </content>
+        </TitledPane>
+        <SplitPane dividerPositions="0.29797979797979796" layoutY="26.0" prefHeight="371.0" prefWidth="602.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="147.0">
+                    <children>
+                        <ListView id="listview_email" layoutX="12.0" layoutY="46.0" prefHeight="283.0"
+                                  prefWidth="153.0"/>
+                        <Label layoutX="12.0" layoutY="14.0" prefHeight="21.0" prefWidth="101.0" text="Posta ricevuta:">
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </Label>
+                        <Button id="btn_upemail" layoutX="56.0" layoutY="338.0" mnemonicParsing="false"
+                                text="Aggiorna"/>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <TextArea id="cntemail_field" layoutX="10.0" layoutY="46.0" prefHeight="313.0"
+                                  prefWidth="399.0"/>
+                        <Label layoutX="14.0" layoutY="14.0" text="Contenuto email :">
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>
