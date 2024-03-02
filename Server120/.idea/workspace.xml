@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d09cd891-fe71-433d-84d1-88657ed1a0c0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../projectProg3/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/mvnw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/mvnw.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/java/it/project/projectprog3/MailClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/java/it/project/Client/MailClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/java/it/project/projectprog3/client/Email.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/java/it/project/Client/Model/Email.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/java/it/project/projectprog3/client/Mailbox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/java/it/project/Client/Model/Mailbox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/java/it/project/projectprog3/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/java/it/project/Client/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/java/it/project/projectprog3/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/java/it/project/Client/controller/ServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/java/it/project/projectprog3/server/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/resources/it/project/projectprog3/email-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/resources/it/project/Client/email-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/resources/it/project/projectprog3/listemail-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/resources/it/project/Client/listemail-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/resources/it/project/projectprog3/login-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/src/main/resources/it/project/Client/login-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../projectProg3/src/main/resources/it/project/projectprog3/server-view.fxml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2d8jumbum0IBrsmDbZ2kEisDFk3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-openjdk-21.0.2-f644763e9732-a81d5c7c" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d09cd891-fe71-433d-84d1-88657ed1a0c0" name="Changes" comment="" />
+      <created>1709396824228</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1709396824228</updated>
+      <workItem from="1709396825362" duration="9000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
