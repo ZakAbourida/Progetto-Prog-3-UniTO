@@ -1,4 +1,4 @@
-package it.project.Client.model;
+package it.project.lib;
 
 import java.util.ArrayList;
 import java.util.List;
