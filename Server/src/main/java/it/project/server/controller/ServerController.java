@@ -1,6 +1,7 @@
 package it.project.server.controller;
 
 import it.project.server.model.Server;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -35,5 +36,8 @@ public class ServerController {
             listserver_view.getItems().add("Server avviato sulla porta 12345");
             btn_start.setText("Stop");
         }
+    }
+    public void logConnection(String message) {
+        Platform.runLater(() -> listserver_view.getItems().add(message));
     }
 }
