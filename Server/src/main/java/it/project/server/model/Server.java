@@ -45,14 +45,6 @@ public class Server {
         this.running = true;
     }
 
-    public Mailbox getBox(String address){
-        if (!loadedBoxes.containsKey(address)){
-            //todo
-        }else {
-            return loadedBoxes.get(address);
-        }
-    }
-
     public void startServer() throws IOException {
         new Thread(() -> {
             try {
@@ -84,5 +76,17 @@ public class Server {
 
     public boolean isRunning() {
         return running;
+    }
+
+    //Thread accessible functions
+    protected synchronized Mailbox getBox(String address){
+        try {
+            return loadedBoxes.getOrDefault(address, new Mailbox(address));
+        }catch (Exception e){
+            for (MailEventReceiver receiver: this.er){
+                receiver.handleException(e);
+            }
+            return null;
+        }
     }
 }
