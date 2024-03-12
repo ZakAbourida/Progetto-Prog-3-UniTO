@@ -41,7 +41,6 @@ public class Server {
                 receiver.handleException(e);
             }
         }
-
         this.running = true;
     }
 
@@ -81,7 +80,7 @@ public class Server {
     //Thread accessible functions
     protected synchronized Mailbox getBox(String address){
         try {
-            return loadedBoxes.getOrDefault(address, new Mailbox(address));
+             return loadedBoxes.getOrDefault(address, this.loadedBoxes.put(address ,new Mailbox(address)));
         }catch (Exception e){
             for (MailEventReceiver receiver: this.er){
                 receiver.handleException(e);

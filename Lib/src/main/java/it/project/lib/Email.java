@@ -2,30 +2,37 @@ package it.project.lib;
 
 import java.io.File;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Email implements Serializable {
-    private int id;
     private String sender;
     private List<String> recipients;
     private String subject;
     private String text;
-    private String sentDate;
+    private String date;
+    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy at H:m:s");
 
-    public Email(int id, String sender, List<String> recipients, String subject, String text, String sentDate) {
-        this.id = id;
+    public Email(String sender, List<String> recipients, String subject, String text) {
         this.sender = sender;
         this.recipients = recipients;
         this.subject = subject;
         this.text = text;
-        this.sentDate = sentDate;
+    }
+
+    public Email(String line) {
+        return Email();
+    }
+
+    @Override
+    public String toString() {
+        return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients;
     }
 
     // Getter methods to retrieve values of private variables
-
-    public int getId() {
-        return id;
-    }
 
     public String getSender() {
         return sender;
@@ -43,23 +50,4 @@ public class Email implements Serializable {
         return text;
     }
 
-    public String getSentDate() {
-        return sentDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Email{" +
-                "id=" + id +
-                ", sender='" + sender + '\'' +
-                ", recipients=" + recipients +
-                ", subject='" + subject + '\'' +
-                ", text='" + text + '\'' +
-                ", sentDate='" + sentDate + '\'' +
-                '}';
-    }
-
-    public void csvAppend(File path){
-
-    }
 }
