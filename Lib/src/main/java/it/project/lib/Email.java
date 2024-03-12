@@ -1,8 +1,10 @@
 package it.project.lib;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
-public class Email {
+public class Email implements Serializable {
     private int id;
     private String sender;
     private List<String> recipients;
@@ -43,5 +45,21 @@ public class Email {
 
     public String getSentDate() {
         return sentDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Email{" +
+                "id=" + id +
+                ", sender='" + sender + '\'' +
+                ", recipients=" + recipients +
+                ", subject='" + subject + '\'' +
+                ", text='" + text + '\'' +
+                ", sentDate='" + sentDate + '\'' +
+                '}';
+    }
+
+    public void csvAppend(File path){
+
     }
 }

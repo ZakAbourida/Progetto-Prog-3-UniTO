@@ -3,7 +3,7 @@ package it.project.lib;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mailbox {
+public class Mailbox{
     private String emailAccount;
     private List<Email> messages;
 

@@ -1,47 +1,72 @@
 package it.project.server.model;
 
 
+import it.project.lib.MailEventReceiver;
+import it.project.lib.Mailbox;
 import it.project.server.controller.ServerController;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    private int port = 12345; // Porta di default
+    private int port = 4040; // Porta di default
     private ServerSocket serverSocket;
-    private ExecutorService pool = Executors.newCachedThreadPool(); // Per gestire molteplici connessioni
+    private ExecutorService pool;
     private boolean running = false;
     private ServerController serverController = null;
+    private HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
+    private List<MailEventReceiver> er;
 
     public void setController(ServerController c){
         this.serverController = c;
     }
 
+    public Server() {
+        this.er = new ArrayList<>();
+        ServerPersistence persistence = new ServerPersistence();
+        ServerLogging logging = new ServerLogging();
+        this.er.add(persistence);
+        this.er.add(logging);
+        this.pool = Executors.newCachedThreadPool();
+
+        try {
+            startServer();
+        }catch (IOException e){
+            for (MailEventReceiver receiver: this.er){
+                receiver.handleException(e);
+            }
+        }
+
+        this.running = true;
+    }
+
+    public Mailbox getBox(String address){
+        if (!loadedBoxes.containsKey(address)){
+            //todo
+        }else {
+            return loadedBoxes.get(address);
+        }
+    }
 
     public void startServer() throws IOException {
         new Thread(() -> {
             try {
                 serverSocket = new ServerSocket(port);
-                running = true;
                 while (running) {
-                    try {
-                        Socket clientSocket = serverSocket.accept();
-                        // Gestisci la connessione del client in un thread separato
-                        pool.execute(new ClientHandler(clientSocket, serverController));
-                    } catch (IOException e) {
-                        if (!running) break; // Uscire se il server è stato fermato
-                        System.out.println("Errore nella connessione del client: " + e.getMessage());
-                        e.printStackTrace();
-                    }
+                    Socket clientSocket = serverSocket.accept();
+                    // Gestisci la connessione del client in un thread separato
+                    pool.execute(new ClientHandler(clientSocket, serverController));
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             } finally {
                 try {
-                    serverSocket.close();
+                    this.serverSocket.close();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

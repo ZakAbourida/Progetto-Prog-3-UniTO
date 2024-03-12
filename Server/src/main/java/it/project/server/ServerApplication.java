@@ -23,9 +23,6 @@ public class ServerApplication extends Application {
         Server s = new Server();
         s.setController(controller);
         controller.setServer(s);
-
-        s.startServer();
-
     }
 
     public static void main(String[] args) {
