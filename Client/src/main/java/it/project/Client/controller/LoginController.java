@@ -1,5 +1,6 @@
 package it.project.Client.controller;
 
+import it.project.lib.*;
 import it.project.Client.ApplicationClient;
 import it.project.Client.model.Client;
 import javafx.application.Platform;
@@ -12,7 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.EOFException;
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.URL;
 
 public class LoginController {
@@ -43,14 +46,20 @@ public class LoginController {
 
         // Pulisci l'etichetta dell'errore prima di procedere
         lbl_error.setText("");
+        //crea il tipo di richiesta
+        RequestType type = new RequestType(email,1);
         // Avvia un nuovo thread per connettersi al server
-        new Thread(() -> connectClient(email)).start();
+        new Thread(() -> connectClient(type)).start();
     }
 
-    private void connectClient(String email) {
+    private void connectClient(Object request) {
         try {
-            Client client = new Client("localhost", 12345, email);
-            client.sendMessage("Hello from " + email);
+            Client client = new Client("localhost", 4040, email_field.getText());
+            client.openConnection();
+            // Send the request to the server
+            Object response = client.sendRequest(request);
+            System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
+
             client.close();
 
             // Dopo la connessione riuscita, cambia la vista.

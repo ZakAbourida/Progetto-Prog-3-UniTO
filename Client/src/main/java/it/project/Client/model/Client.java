@@ -1,48 +1,78 @@
 package it.project.Client.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import it.project.lib.RequestType;
+
+import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.regex.Pattern;
 
 public class Client {
     private Socket socket;
-    private BufferedReader input;
-    private PrintWriter output;
+    private ObjectInputStream input = null;
+    private ObjectOutputStream output = null;
     private String email;
+    private String address;
+    private int port;
 
     public Client(String address, int port, String email) {
         if (!isValidEmail(email)) {
             throw new IllegalArgumentException("L'email non è valida.");
         }
         this.email = email;
-        try {
+        this.port = port;
+        this.address = address;
+        /*try {
             socket = new Socket(address, port);
             System.out.println("Connesso al server con l'email: " + email);
 
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(socket.getOutputStream(), true);
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
 
             // Invia l'email al server come primo messaggio
-            sendMessage(email);
-
-            // Ascolta la risposta del server
-            String response = input.readLine();
-            System.out.println("Server dice: " + response);
+            try{
+                RequestType req = new RequestType(email, 0);
+                sendRequest(req);
+            }catch(IOException | ClassNotFoundException e){
+                e.printStackTrace();
+            }
 
             close();
-
         } catch (IOException e) {
             System.out.println("Errore di connessione al server: " + e.getMessage());
             e.printStackTrace();
-        }
+        }*/
     }
 
-    public void sendMessage(String message) {
+    /*public void sendMessage(String message) {
         output.println(message);
+    }*/
+
+    public Object sendRequest(Object request) throws IOException, ClassNotFoundException {
+        try {
+            // Invia la richiesta al server
+            output.writeObject(request);
+            output.flush();
+            // Ricevi la risposta dal server
+            Object response = input.readObject();
+            System.out.println("CLIENT ==> Il server ha risposto: " + response);
+            return response;
+        } catch (SocketException | NullPointerException | EOFException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    public void openConnection() throws IOException {
+        try {
+            socket = new Socket(address, port);
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
+            output.flush();
+        } catch (ConnectException e) {
+            System.err.println("Connection error: " + e.getMessage());
+        }}
 
     public void close() {
         try {

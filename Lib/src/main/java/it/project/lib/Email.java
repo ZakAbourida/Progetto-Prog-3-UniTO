@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -15,7 +14,7 @@ public class Email implements Serializable {
     private String subject;
     private String text;
     private String date;
-    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy H:m:s");
+    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy at H:m:s");
 
     public Email(String sender, List<String> recipients, String subject, String text) {
         this.sender = sender;
@@ -25,12 +24,7 @@ public class Email implements Serializable {
     }
 
     public Email(String line) {
-        String [] parts = line.split(",",5);
-        String [] recipients = parts[4].split(",");
-        this.sender = parts[0];
-        this.recipients = Arrays.stream(recipients).toList();
-        this.subject = parts[1];
-        this.text = parts[2];
+        return Email();
     }
 
     @Override

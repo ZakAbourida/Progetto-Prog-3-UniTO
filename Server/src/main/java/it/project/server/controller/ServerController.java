@@ -19,6 +19,7 @@ public class ServerController {
     public void setServer(Server s){
         this.server = s;
     }
+
     /*
     @FXML
     protected void StartAndStop() {
