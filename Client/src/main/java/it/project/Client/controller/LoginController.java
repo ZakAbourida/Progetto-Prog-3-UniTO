@@ -55,9 +55,11 @@ public class LoginController {
     private void connectClient(Object request) {
         try {
             Client client = new Client("localhost", 4040, email_field.getText());
-            //client.sendMessage("Hello from " + email);
+            client.openConnection();
             // Send the request to the server
             Object response = client.sendRequest(request);
+            System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
+
             client.close();
 
             // Dopo la connessione riuscita, cambia la vista.

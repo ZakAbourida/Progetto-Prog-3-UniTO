@@ -79,6 +79,8 @@ public class ClientHandler implements Runnable {
         RequestType richiesta = (RequestType) req;
 
         switch(richiesta.getType()) {
+            case 0: // Connection request
+                return handleLoginRequest(richiesta);
             case 1: // Login request
                 return handleLoginRequest(richiesta);
             case 2: // Send email request
@@ -94,16 +96,16 @@ public class ClientHandler implements Runnable {
 
     public RequestType handleLoginRequest(RequestType request){
         serverController.logConnection("Client connesso: "+request.getEmail());
-        return null;
+        return request;
     }
     public RequestType handleSendEmailRequest(RequestType request){
-        return null;
+        return request;
     }
     public RequestType handleReceiveEmailRequest(RequestType request){
-        return null;
+        return request;
     }
     public RequestType handleDeleteEmailRequest(RequestType request){
-        return null;
+        return request;
     }
 
 
