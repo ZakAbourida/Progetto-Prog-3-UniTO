@@ -1,16 +1,17 @@
 package it.project.Client.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import it.project.Client.controller.LoginController;
+import it.project.lib.RequestType;
+
+import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.regex.Pattern;
 
 public class Client {
     private Socket socket;
-    private BufferedReader input;
-    private PrintWriter output;
+    private ObjectInputStream input = null;
+    private ObjectOutputStream output = null;
     private String email;
 
     public Client(String address, int port, String email) {
@@ -22,26 +23,46 @@ public class Client {
             socket = new Socket(address, port);
             System.out.println("Connesso al server con l'email: " + email);
 
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(socket.getOutputStream(), true);
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
 
             // Invia l'email al server come primo messaggio
-            sendMessage(email);
+            try{
+                RequestType req = new RequestType(email, 1);
+                sendRequest(req);
+            }catch(IOException | ClassNotFoundException e){
+                e.printStackTrace();
+            }
 
             // Ascolta la risposta del server
-            String response = input.readLine();
-            System.out.println("Server dice: " + response);
+            Object response = input.readObject();
+            System.out.println("Il server ha risposto: " + response);
 
             close();
 
         } catch (IOException e) {
             System.out.println("Errore di connessione al server: " + e.getMessage());
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void sendMessage(String message) {
+    /*public void sendMessage(String message) {
         output.println(message);
+    }*/
+
+    public Object sendRequest(Object request) throws IOException, ClassNotFoundException {
+        try {
+            // Invia la richiesta al server
+            output.writeObject(request);
+            // Ricevi la risposta dal server
+            Object response = input.readObject();
+            return response;
+        } catch (SocketException | NullPointerException | EOFException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void close() {
