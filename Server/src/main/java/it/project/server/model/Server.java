@@ -42,6 +42,8 @@ public class Server {
             }
         }
         this.running = true;
+
+        getBox("prova3@mail.com");
     }
 
     public void startServer() throws IOException {

@@ -22,8 +22,16 @@ public class Mailbox{
         Predicate<File> check = (elem) -> elem.getName().substring(0,elem.getName().lastIndexOf(".")).equals(emailAccount);
         this.fd = Arrays.stream(Objects.requireNonNull(dir.listFiles()))
                 .filter(check)
-                .findAny()
-                .orElse(newMailbox(dir.getPath()+ "/" + emailAccount + ".csv"));
+                .findFirst()
+                .orElseGet(() -> {
+                    try {
+                        File f = new File(dir.getPath()+ "/" + emailAccount + ".csv");
+                        f.createNewFile();
+                        return f;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
         readMailbox();
     }
 
@@ -43,13 +51,6 @@ public class Mailbox{
             wr.write(email.toString());
         }
         wr.close();
-    }
-
-    private File newMailbox(String path) throws IOException {
-        File f = new File(path);
-        f.createNewFile();
-        System.out.println(f.getAbsolutePath());
-        return f;
     }
 
     public void sendEmail(Email email) {
