@@ -14,6 +14,7 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream out;
     private ServerController serverController;
 
+
     public ClientHandler(Socket socket, ServerController controller) throws IOException {
         this.clientSocket = socket;
         this.serverController = controller;
@@ -30,20 +31,20 @@ public class ClientHandler implements Runnable {
                 Object response = handleRequest(request);
                 // Send the response to the client
                 out.writeObject(response);
-                serverController.logConnection("Client connesso: ");
+                // serverController.logConnection("Client connesso: ");
 
                 // Pulizia: chiudi gli stream e il socket
                 in.close();
                 out.close();
                 clientSocket.close();
-                serverController.logConnection("Client disconnesso: ");
+                //serverController.logConnection("Client disconnesso: ");
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Errore nella gestione del client: " + e.getMessage());
                 e.printStackTrace();
             }
     }
 
-    /**
+    /*
      * System.out.println("Connesso: ");
      *         while(true){
      *             try {
@@ -99,6 +100,7 @@ public class ClientHandler implements Runnable {
         return request;
     }
     public RequestType handleSendEmailRequest(RequestType request){
+
         return request;
     }
     public RequestType handleReceiveEmailRequest(RequestType request){

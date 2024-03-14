@@ -33,6 +33,11 @@ public class Email implements Serializable {
         this.text = parts[3];
     }
 
+    //costruttore vuoto temporaneo o forse no
+    public Email() {
+
+    }
+
     @Override
     public String toString() {
         return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients;
@@ -56,4 +61,27 @@ public class Email implements Serializable {
         return text;
     }
 
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public void setRecipients(List<String> recipients) {
+        this.recipients = recipients;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setFormat(SimpleDateFormat format) {
+        this.format = format;
+    }
 }
