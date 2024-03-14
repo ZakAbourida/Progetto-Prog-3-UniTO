@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.progettoprog3.EmailView">
+            fx:controller="it.project.Client.controller.EmailController">
     <children>
         <TextField id="email_field" alignment="CENTER" layoutX="35.0" layoutY="161.0" prefHeight="196.0"
                    prefWidth="531.0" promptText="Write email here..."/>
