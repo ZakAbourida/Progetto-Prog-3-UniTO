@@ -119,7 +119,13 @@ public class ClientHandler implements Runnable {
         out.writeObject(m.getMessages());
         return  request;
     }
-    public RequestType handleDeleteEmailRequest(RequestType request){
+    public RequestType handleDeleteEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
+        Object mail = in.readObject();
+        if (!(mail instanceof Email)){
+            throw new IllegalArgumentException("An email is expected after a delete request");
+        }
+        Mailbox m = server.getBox(request.getEmail());
+        m.removeMessage((Email) mail);
         return request;
     }
 
