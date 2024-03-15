@@ -1,4 +1,6 @@
-package it.project.lib;
+package it.project.server.model;
+
+import it.project.lib.Email;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -14,11 +16,16 @@ public class Mailbox{
         this.messages = new ArrayList<>();
         File dir = new File(Objects.requireNonNull(Mailbox.class.getResource("database")).toURI());
         this.fd = new File(dir.getPath()+ "/" + emailAccount + ".csv");
-        if (fd.createNewFile())System.out.println("mailCreated");
-        readMailbox();
     }
 
-    private synchronized void readMailbox() throws IOException{
+    public synchronized List<Email> getMessages(){
+        return messages;
+    }
+
+    protected boolean createOrExists() throws IOException{
+        return this.fd.createNewFile();
+    }
+    protected synchronized void readMailbox() throws IOException{
         BufferedReader rd = new BufferedReader(new FileReader(fd));
         String line;
         while((line = rd.readLine()) !=  null){
@@ -28,16 +35,12 @@ public class Mailbox{
         rd.close();
     }
 
-    private synchronized void writeMailbox() throws IOException{
+    protected synchronized void writeMailbox() throws IOException{
         BufferedWriter wr = new BufferedWriter(new FileWriter(fd));
         for (Email email : messages){
             wr.write(email.toString());
         }
         wr.flush();
         wr.close();
-    }
-
-    public synchronized List<Email> getMessages(){
-        return messages;
     }
 }

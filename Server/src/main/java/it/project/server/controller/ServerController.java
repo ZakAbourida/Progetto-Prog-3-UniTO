@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
 public class ServerController {
-    private Server server;
+    private Server model;
 
     @FXML
     private ListView listserver_view;
@@ -17,7 +17,7 @@ public class ServerController {
 
 
     public void setServer(Server s){
-        this.server = s;
+        this.model = s;
     }
 
     /*

@@ -1,9 +1,8 @@
 package it.project.server.model;
 
 
-import it.project.lib.MailEventReceiver;
-import it.project.lib.Mailbox;
 import it.project.server.controller.ServerController;
+
 
 import java.io.IOException;
 import java.net.*;
@@ -20,26 +19,20 @@ public class Server {
     private boolean running = false;
     private ServerController serverController = null;
     private HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
-    private List<MailEventReceiver> er;
 
     public void setController(ServerController c){
         this.serverController = c;
     }
 
     public Server() {
-        this.er = new ArrayList<>();
         ServerPersistence persistence = new ServerPersistence();
         ServerLogging logging = new ServerLogging();
-        this.er.add(persistence);
-        this.er.add(logging);
         this.pool = Executors.newCachedThreadPool();
 
         try {
             startServer();
         }catch (IOException e){
-            for (MailEventReceiver receiver: this.er){
-                receiver.handleException(e);
-            }
+            logError();
         }
         this.running = true;
     }
@@ -51,7 +44,7 @@ public class Server {
                 while (running) {
                     Socket clientSocket = serverSocket.accept();
                     // Gestisci la connessione del client in un thread separato
-                    pool.execute(new ClientHandler(clientSocket, serverController));
+                    pool.execute(new ClientHandler(clientSocket, serverController,this));
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -77,15 +70,25 @@ public class Server {
         return running;
     }
 
-    //Thread accessible functions
+    //Thread accessed functions
     protected synchronized Mailbox getBox(String address){
-        try {
-             return loadedBoxes.getOrDefault(address, this.loadedBoxes.put(address ,new Mailbox(address)));
-        }catch (Exception e){
-            for (MailEventReceiver receiver: this.er){
-                receiver.handleException(e);
+        return loadedBoxes.computeIfAbsent(address,
+            (key) -> {
+                try {
+                    Mailbox ret = new Mailbox(key);
+                    if(ret.createOrExists()){
+                        logError();
+                    }
+                    ret.readMailbox();
+                    return ret;
+                } catch (URISyntaxException e) { //TODO crash
+                    //Database fault fs has been tampered
+                    throw new RuntimeException(e);
+                } catch (IOException e) { //TODO notify
+                    //IO error notify observers
+                    throw new RuntimeException(e);
+                }
             }
-            return null;
-        }
+        );
     }
 }

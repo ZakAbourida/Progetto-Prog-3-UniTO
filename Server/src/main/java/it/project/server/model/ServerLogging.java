@@ -1,8 +1,6 @@
 package it.project.server.model;
 
 import it.project.lib.Email;
-import it.project.lib.MailEventReceiver;
-import it.project.lib.Mailbox;
 
 public class ServerLogging implements MailEventReceiver {
     @Override
@@ -18,5 +16,10 @@ public class ServerLogging implements MailEventReceiver {
     @Override
     public void handleException(Exception e) { //TODO
         e.printStackTrace();
+    }
+
+    @Override
+    public void handleMailboxCreated(Mailbox mailbox) {
+
     }
 }
