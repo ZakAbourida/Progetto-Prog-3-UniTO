@@ -14,9 +14,10 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream out;
     private ServerController serverController;
 
-    public ClientHandler(Socket socket, ServerController controller) throws IOException {
+    public ClientHandler(Socket socket, ServerController controller, Server serverInstance) throws IOException {
         this.clientSocket = socket;
         this.serverController = controller;
+        this.server = serverInstance;
         this.in = new ObjectInputStream(socket.getInputStream());
         this.out = new ObjectOutputStream(socket.getOutputStream());
     }
@@ -94,8 +95,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public RequestType handleLoginRequest(RequestType request){
+    public RequestType handleLoginRequest(RequestType request) throws IOException {
         serverController.logConnection("Client connesso: "+request.getEmail());
+        Mailbox m = server.getBox(request.getEmail());
+        out.writeObject(m.getMessages());
         return request;
     }
     public RequestType handleSendEmailRequest(RequestType request){

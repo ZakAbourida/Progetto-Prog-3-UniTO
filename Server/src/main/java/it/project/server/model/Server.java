@@ -3,12 +3,10 @@ package it.project.server.model;
 
 import it.project.server.controller.ServerController;
 
-
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,19 +23,17 @@ public class Server {
     }
 
     public Server() {
-        ServerPersistence persistence = new ServerPersistence();
-        ServerLogging logging = new ServerLogging();
         this.pool = Executors.newCachedThreadPool();
 
         try {
             startServer();
         }catch (IOException e){
-            logError();
+            //logError();
         }
         this.running = true;
     }
 
-    public void startServer() throws IOException {
+    private void startServer() throws IOException {
         new Thread(() -> {
             try {
                 serverSocket = new ServerSocket(port);
@@ -77,18 +73,35 @@ public class Server {
                 try {
                     Mailbox ret = new Mailbox(key);
                     if(ret.createOrExists()){
-                        logError();
+                        //logger("new mailbox created with adress" + address + "at:" + new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss").format(new java.util.Date()));
+                        System.out.println("mailcreated");
                     }
                     ret.readMailbox();
                     return ret;
                 } catch (URISyntaxException e) { //TODO crash
-                    //Database fault fs has been tampered
-                    throw new RuntimeException(e);
+                    //Database fault fs has been tampered with
+                    pool.shutdown();
+                    System.exit(0);
                 } catch (IOException e) { //TODO notify
                     //IO error notify observers
                     throw new RuntimeException(e);
                 }
+                return null;
             }
         );
     }
+
+    /*private synchronized void logger(String s) {
+        try {
+            File logs = new File(Objects.requireNonNull(Mailbox.class.getResource("logs.txt")).toURI());
+            FileWriter wr = new FileWriter(logs);
+        }catch (URISyntaxException e){
+            //Database fault fs has been tampered with
+            pool.shutdown();
+            System.exit(0);
+        }catch (IOException e){
+            logError();
+        }
+
+    }*/
 }
