@@ -80,8 +80,6 @@ public class ClientHandler implements Runnable {
         RequestType richiesta = (RequestType) req;
 
         switch(richiesta.getType()) {
-            case 0: // Connection request
-                return handleLoginRequest(richiesta);
             case 1: // Login request
                 return handleLoginRequest(richiesta);
             case 2: // Send email request

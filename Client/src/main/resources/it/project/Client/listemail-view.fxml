@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -16,17 +15,26 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
         </TitledPane>
-        <SplitPane dividerPositions="0.29797979797979796" layoutY="26.0" prefHeight="371.0" prefWidth="602.0">
+        <SplitPane dividerPositions="0.25583333333333336" layoutY="26.0" prefHeight="371.0" prefWidth="602.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="147.0">
                     <children>
-                        <ListView fx:id="listview_email" layoutX="11.0" layoutY="77.0" prefHeight="283.0" prefWidth="153.0" />
-                        <Label layoutX="14.0" layoutY="55.0" prefHeight="21.0" prefWidth="101.0" text="Posta ricevuta:">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </Label>
-                  <Button fx:id="btn_newemail" layoutX="11.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="153.0" text="+ Write Email">
+                  <Button fx:id="btn_newemail" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="123.0" text="New Email">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btn_newemail1" layoutX="15.0" layoutY="267.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="82.0" text="Reply">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btn_newemail2" layoutX="15.0" layoutY="311.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="82.0" text="Cancel">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btn_newemail11" layoutX="14.0" layoutY="222.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="82.0" text="Forward">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -34,14 +42,14 @@
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                    <children>
-                        <TextArea fx:id="email_field" layoutX="10.0" layoutY="46.0" prefHeight="313.0" prefWidth="399.0" />
-                        <Label layoutX="14.0" layoutY="14.0" text="Contenuto email :">
+               <children>
+                        <ListView fx:id="listview_email" layoutX="10.0" layoutY="25.0" prefHeight="338.0" prefWidth="423.0" />
+                        <Label layoutX="14.0" layoutY="4.0" prefHeight="21.0" prefWidth="101.0" text="Incoming email:">
                             <font>
                                 <Font size="15.0" />
                             </font>
                         </Label>
-                    </children>
+               </children>
                 </AnchorPane>
             </items>
         </SplitPane>

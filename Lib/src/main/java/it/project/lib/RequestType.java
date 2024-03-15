@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class RequestType implements Serializable {
     private String email; // email of the login
     private int type; /**
-                        * 0 -> connessione
                         * 1 -> login request
                         * 2 -> send email request
                         * 3 -> receive email request
