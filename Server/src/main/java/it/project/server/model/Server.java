@@ -3,7 +3,6 @@ package it.project.server.model;
 
 import it.project.server.controller.ServerController;
 
-import java.io.IOException;
 import java.net.*;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
