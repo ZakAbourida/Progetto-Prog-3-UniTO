@@ -43,4 +43,9 @@ public class Mailbox{
         wr.flush();
         wr.close();
     }
+
+    protected synchronized void addMessage(Email m){
+        messages.add(m);
+    }
+    protected synchronized void removeMessage(Email m){messages.remove(m);}
 }

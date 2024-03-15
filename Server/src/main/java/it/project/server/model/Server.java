@@ -5,18 +5,17 @@ import it.project.server.controller.ServerController;
 
 import java.io.IOException;
 import java.net.*;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    private int port = 4040; // Porta di default
+    private final int port = 4040; // Porta di default
     private ServerSocket serverSocket;
-    private ExecutorService pool;
+    private final ExecutorService pool;
     private boolean running = false;
     private ServerController serverController = null;
-    private HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
+    private final HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
 
     public void setController(ServerController c){
         this.serverController = c;
@@ -74,7 +73,7 @@ public class Server {
                     Mailbox ret = new Mailbox(key);
                     if(ret.createOrExists()){
                         //logger("new mailbox created with adress" + address + "at:" + new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss").format(new java.util.Date()));
-                        System.out.println("mailcreated");
+                        System.out.println("mailcreated"); //TODO notify logger
                     }
                     ret.readMailbox();
                     return ret;
@@ -82,7 +81,7 @@ public class Server {
                     //Database fault fs has been tampered with
                     pool.shutdown();
                     System.exit(0);
-                } catch (IOException e) { //TODO notify
+                } catch (IOException e) { //TODO notify logger
                     //IO error notify observers
                     throw new RuntimeException(e);
                 }
