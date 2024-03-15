@@ -3,35 +3,18 @@ package it.project.lib;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class Mailbox{
-    private String emailAccount;
-    private List<Email> messages;
-    private File fd;
+    private final List<Email> messages;
+    private final File fd;
 
     public Mailbox(String emailAccount) throws URISyntaxException, IOException {
-        this.emailAccount = emailAccount;
         this.messages = new ArrayList<>();
-
         File dir = new File(Objects.requireNonNull(Mailbox.class.getResource("database")).toURI());
-        Predicate<File> check = (elem) -> elem.getName().substring(0,elem.getName().lastIndexOf(".")).equals(emailAccount);
-        this.fd = Arrays.stream(Objects.requireNonNull(dir.listFiles()))
-                .filter(check)
-                .findFirst()
-                .orElseGet(() -> {
-                    try {
-                        File f = new File(dir.getPath()+ "/" + emailAccount + ".csv");
-                        f.createNewFile();
-                        return f;
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        this.fd = new File(dir.getPath()+ "/" + emailAccount + ".csv");
+        if (fd.createNewFile())System.out.println("mailCreated");
         readMailbox();
     }
 
@@ -50,14 +33,11 @@ public class Mailbox{
         for (Email email : messages){
             wr.write(email.toString());
         }
+        wr.flush();
         wr.close();
     }
 
-    public void sendEmail(Email email) {
-        messages.add(email);
-    }
-
-    public String getEmailAccount() {
-        return emailAccount;
+    public synchronized List<Email> getMessages(){
+        return messages;
     }
 }
