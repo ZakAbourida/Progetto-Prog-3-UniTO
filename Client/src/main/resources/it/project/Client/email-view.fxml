@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.progettoprog3.EmailView">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.project.Client.controller.EmailController">
     <children>
-        <TextField id="email_field" alignment="CENTER" layoutX="35.0" layoutY="161.0" prefHeight="196.0"
-                   prefWidth="531.0" promptText="Write email here..."/>
-        <TitledPane alignment="CENTER" animated="false" collapsible="false" expanded="false" layoutY="1.0"
-                    prefHeight="26.0" prefWidth="600.0" text="Email">
+        <TextField fx:id="field_text" alignment="TOP_LEFT" layoutX="35.0" layoutY="161.0" prefHeight="196.0" prefWidth="531.0" promptText="Write email here..." />
+        <TitledPane alignment="CENTER" animated="false" collapsible="false" expanded="false" layoutY="1.0" prefHeight="26.0" prefWidth="600.0" text="Email">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
             <font>
-                <Font size="13.0"/>
+                <Font size="13.0" />
             </font>
         </TitledPane>
-        <TextField layoutX="35.0" layoutY="121.0" prefHeight="25.0" prefWidth="531.0"/>
+        <TextField fx:id="field_subject" layoutX="35.0" layoutY="121.0" prefHeight="25.0" prefWidth="531.0" />
         <Label layoutX="31.0" layoutY="93.0" text="Oggetto:">
             <font>
-                <Font size="13.0"/>
+                <Font size="13.0" />
             </font>
         </Label>
-        <TextField layoutX="35.0" layoutY="59.0" prefHeight="25.0" prefWidth="486.0"/>
-        <Label layoutX="31.0" layoutY="34.0" text="Destinatorio:">
+        <TextField fx:id="field_email" layoutX="35.0" layoutY="59.0" prefHeight="25.0" prefWidth="486.0" />
+        <Label layoutX="31.0" layoutY="34.0" text="Destinatario:">
             <font>
-                <Font size="13.0"/>
+                <Font size="13.0" />
             </font>
         </Label>
-        <Button layoutX="264.0" layoutY="365.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0"
-                text="Invia"/>
-        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="528.0" layoutY="55.0" maxHeight="-Infinity"
-                maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                prefHeight="34.0" prefWidth="38.0" text="+">
+        <Button fx:id="btn_send" layoutX="264.0" layoutY="365.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="Invia" />
+        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="528.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="34.0" prefWidth="38.0" text="+">
             <font>
-                <Font size="15.0"/>
+                <Font size="15.0" />
             </font>
         </Button>
     </children>

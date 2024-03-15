@@ -1,6 +1,5 @@
 package it.project.server.model;
 
-import it.project.lib.Email;
 import it.project.lib.RequestType;
 import it.project.server.controller.ServerController;
 
@@ -15,10 +14,9 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream out;
     private ServerController serverController;
 
-    public ClientHandler(Socket socket, ServerController controller, Server serverInstance) throws IOException {
+    public ClientHandler(Socket socket, ServerController controller) throws IOException {
         this.clientSocket = socket;
         this.serverController = controller;
-        this.server = serverInstance;
         this.in = new ObjectInputStream(socket.getInputStream());
         this.out = new ObjectOutputStream(socket.getOutputStream());
     }
@@ -96,12 +94,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public RequestType handleLoginRequest(RequestType request) throws IOException {
-        String address = request.getEmail();
-        serverController.logConnection("Client connesso: "+ address);
-        Mailbox mailbox = server.getBox(address);
-        List<Email> list = mailbox.getMessages();
-        this.out.writeObject(list);
+    public RequestType handleLoginRequest(RequestType request){
+        serverController.logConnection("Client connesso: "+request.getEmail());
         return request;
     }
     public RequestType handleSendEmailRequest(RequestType request){
