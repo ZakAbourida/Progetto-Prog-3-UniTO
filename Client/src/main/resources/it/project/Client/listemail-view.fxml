@@ -19,22 +19,27 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="147.0">
                     <children>
-                  <Button fx:id="btn_newemail" layoutX="15.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="123.0" text="New Email">
+                  <Button fx:id="btn_newemail" layoutX="15.0" layoutY="150.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="New Email">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btn_newemail1" layoutX="15.0" layoutY="267.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="82.0" text="Reply">
+                  <Button fx:id="btn_reply" layoutX="15.0" layoutY="277.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Reply">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btn_newemail2" layoutX="15.0" layoutY="311.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="82.0" text="Cancel">
+                  <Button fx:id="btn_cancel" layoutX="15.0" layoutY="320.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Cancel">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btn_newemail11" layoutX="14.0" layoutY="222.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="82.0" text="Forward">
+                  <Button fx:id="btn_forward" layoutX="15.0" layoutY="234.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Forward">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btn_refresh" layoutX="15.0" layoutY="192.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Refresh">
                      <font>
                         <Font size="16.0" />
                      </font>

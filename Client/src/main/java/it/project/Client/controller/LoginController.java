@@ -60,6 +60,7 @@ public class LoginController {
             Object response = client.sendRequest(request);
             System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
 
+
             client.close();
 
             // Dopo la connessione riuscita, cambia la vista.

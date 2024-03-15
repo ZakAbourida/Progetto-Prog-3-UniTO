@@ -14,12 +14,17 @@ import java.io.IOException;
 public class ListEmailController {
     @FXML
     private Button btn_newemail;
-
+    @FXML
+    private Button btn_forward;
+    @FXML
+    private Button btn_reply;
+    @FXML
+    private Button btn_cancel;
+    @FXML
+    private Button btn_refresh;
     @FXML
     private ListView listview_email;
 
-    @FXML
-    private TextArea email_field;
 
     @FXML
     public void initialize() {
@@ -39,6 +44,8 @@ public class ListEmailController {
         });
         */
     }
+
+
 
     public void writeEmail() throws IOException {
         // Carica il file FXML per la nuova scena
