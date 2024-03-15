@@ -17,6 +17,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.URL;
+import java.util.List;
 
 public class LoginController {
 
@@ -26,6 +27,7 @@ public class LoginController {
     private TextField email_field;
     @FXML
     private Label lbl_error;
+    private ListEmailController listEmailController;
 
     public void initialize() {
         btn_login.setOnAction(event -> login());
@@ -59,19 +61,18 @@ public class LoginController {
             // Send the request to the server
             Object response = client.sendRequest(request);
             System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
-
-
-            client.close();
-
+            listEmailController = new ListEmailController();
             // Dopo la connessione riuscita, cambia la vista.
             Platform.runLater(() -> {
                 try {
                     switchToEmailListView();
+                    listEmailController.fillReceivedEmail(response);
                 } catch (IOException e) {
                     lbl_error.setText("Impossibile caricare listemail-view.fxml");
                     e.printStackTrace();
                 }
             });
+            client.close();
         } catch (Exception e) {
             Platform.runLater(() -> lbl_error.setText("Errore di connessione al server: offline"));
             e.printStackTrace();
@@ -83,10 +84,12 @@ public class LoginController {
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("listemail-view.fxml"));
 
         // Ottiene lo stage corrente (dalla finestra attuale) e imposta la nuova scena
+        fxmlLoader.setController(listEmailController);
         Stage stage = (Stage) btn_login.getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.setTitle(email_field.getText().trim());
         stage.show();
     }
+
 }
