@@ -114,8 +114,10 @@ public class ClientHandler implements Runnable {
         }
         return request;
     }
-    public RequestType handleReceiveEmailRequest(RequestType request){
-        return request;
+    public RequestType handleReceiveEmailRequest(RequestType request) throws IOException {
+        Mailbox m = server.getBox(request.getEmail());
+        out.writeObject(m.getMessages());
+        return  request;
     }
     public RequestType handleDeleteEmailRequest(RequestType request){
         return request;
