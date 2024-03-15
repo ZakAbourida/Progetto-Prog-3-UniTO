@@ -1,5 +1,6 @@
 package it.project.server.model;
 
+import it.project.lib.Email;
 import it.project.lib.RequestType;
 import it.project.server.controller.ServerController;
 
@@ -71,7 +72,7 @@ public class ClientHandler implements Runnable {
      *         }
      */
 
-    public Object handleRequest(Object req) throws IOException {
+    public Object handleRequest(Object req) throws IOException, ClassNotFoundException {
         // Verifica se req è un'istanza di RequestType
         if (!(req instanceof RequestType)) {
             throw new IllegalArgumentException("Richiesta non valida");
@@ -101,7 +102,16 @@ public class ClientHandler implements Runnable {
         out.writeObject(m.getMessages());
         return request;
     }
-    public RequestType handleSendEmailRequest(RequestType request){
+    public RequestType handleSendEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
+        Object mail = in.readObject();
+        if (!(mail instanceof Email)){
+            throw new IllegalArgumentException("An email is expected after a send request");
+        }
+        for (String recipient: ((Email)mail).getRecipients()){
+            Mailbox box = server.getBox(recipient);
+            box.addMessage((Email) mail);
+            box.writeMailbox(); //TODO better caching and transactions
+        }
         return request;
     }
     public RequestType handleReceiveEmailRequest(RequestType request){
