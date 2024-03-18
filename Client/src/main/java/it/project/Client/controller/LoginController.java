@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.EOFException;
@@ -31,6 +32,11 @@ public class LoginController {
 
     public void initialize() {
         btn_login.setOnAction(event -> login());
+        email_field.setOnKeyPressed((keyEvent)-> { //Lambda form EventHandler<KeyEvent>
+            if (keyEvent.getCode().equals(KeyCode.ENTER)){
+                login();
+            }
+        });
     }
 
     private void login() {
