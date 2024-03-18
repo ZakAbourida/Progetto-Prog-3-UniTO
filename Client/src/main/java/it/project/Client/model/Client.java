@@ -13,37 +13,6 @@ public class Client {
     private ObjectInputStream input = null;
     private ObjectOutputStream output = null;
     private String email;
-    private String address;
-    private int port;
-
-    public Client(String address, int port, String email) {
-        if (!isValidEmail(email)) {
-            throw new IllegalArgumentException("L'email non è valida.");
-        }
-        this.email = email;
-        this.port = port;
-        this.address = address;
-        /*try {
-            socket = new Socket(address, port);
-            System.out.println("Connesso al server con l'email: " + email);
-
-            output = new ObjectOutputStream(socket.getOutputStream());
-            input = new ObjectInputStream(socket.getInputStream());
-
-            // Invia l'email al server come primo messaggio
-            try{
-                RequestType req = new RequestType(email, 0);
-                sendRequest(req);
-            }catch(IOException | ClassNotFoundException e){
-                e.printStackTrace();
-            }
-
-            close();
-        } catch (IOException e) {
-            System.out.println("Errore di connessione al server: " + e.getMessage());
-            e.printStackTrace();
-        }*/
-    }
 
     /*public void sendMessage(String message) {
         output.println(message);
@@ -64,7 +33,7 @@ public class Client {
         return null;
     }
 
-    public void openConnection() throws IOException {
+    public void openConnection(String address,int port) throws IOException {
         try {
             socket = new Socket(address, port);
             output = new ObjectOutputStream(socket.getOutputStream());

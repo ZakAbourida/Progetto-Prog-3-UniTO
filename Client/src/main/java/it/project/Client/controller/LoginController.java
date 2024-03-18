@@ -29,6 +29,7 @@ public class LoginController {
     @FXML
     private Label lbl_error;
     private ListEmailController listEmailController;
+    private Client model;
 
     public void initialize() {
         btn_login.setOnAction(event -> login());
@@ -37,6 +38,10 @@ public class LoginController {
                 login();
             }
         });
+    }
+
+    public void setModel(Client model) {
+        this.model = model;
     }
 
     private void login() {
@@ -54,18 +59,17 @@ public class LoginController {
 
         // Pulisci l'etichetta dell'errore prima di procedere
         lbl_error.setText("");
-        //crea il tipo di richiesta
-        RequestType type = new RequestType(email,1);
-        // Avvia un nuovo thread per connettersi al server
-        new Thread(() -> connectClient(type)).start();
+
+        //Ask model for login request
+
+        connectClient(new RequestType(email,1));
     }
 
     private void connectClient(Object request) {
         try {
-            Client client = new Client("localhost", 4040, email_field.getText());
-            client.openConnection();
+            model.openConnection("127.0.0.1",4040);
             // Send the request to the server
-            Object response = client.sendRequest(request);
+            Object response = model.sendRequest(request);
             System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
             listEmailController = new ListEmailController();
             // Dopo la connessione riuscita, cambia la vista.
@@ -78,7 +82,7 @@ public class LoginController {
                     e.printStackTrace();
                 }
             });
-            client.close();
+            model.close();
         } catch (Exception e) {
             Platform.runLater(() -> lbl_error.setText("Errore di connessione al server: offline"));
             e.printStackTrace();
