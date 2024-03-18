@@ -17,13 +17,7 @@ public class ListEmailController {
     @FXML
     private Button btn_newemail;
     @FXML
-    private Button btn_forward;
-    @FXML
-    private Button btn_reply;
-    @FXML
-    private Button btn_cancel;
-    @FXML
-    private Button btn_refresh;
+    private Button btn_newarrivals;
     @FXML
     private ListView listview_email;
 
@@ -39,6 +33,9 @@ public class ListEmailController {
                 e.printStackTrace();
             }
         });
+
+        //btn_newarrivals.setOnAction(event -> login());
+
         // Configura il listener per la selezione nella ListView
         /*
         listview_email.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
