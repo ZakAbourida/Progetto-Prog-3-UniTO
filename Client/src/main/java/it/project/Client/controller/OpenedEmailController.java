@@ -32,9 +32,9 @@ public class OpenedEmailController {
         btn_reply.setOnAction(actionEvent -> {replyEmail();});
     }
 
-    public void cancelEmail(){/*DA COMPLETARE*/}
-    public void forwardEmail(){/*DA COMPLETARE*/}
-    public void replyEmail(){/*DA COMPLETARE*/}
+    public void cancelEmail(){/*TODO:DA COMPLETARE*/}
+    public void forwardEmail(){/*TODO: DA COMPLETARE*/}
+    public void replyEmail(){/*TODO: DA COMPLETARE*/}
 
     public void getDetails(String sender, List<String>recipient, String subject, String text) {
         sender_text.setText(sender);

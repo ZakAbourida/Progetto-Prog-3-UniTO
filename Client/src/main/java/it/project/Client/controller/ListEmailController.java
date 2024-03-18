@@ -113,7 +113,7 @@ public class ListEmailController {
             // Crea una nuova finestra
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Dettagli Email");
+            stage.setTitle("Dettagli Email || "+ selectedEmail.getSubject());
             stage.show();
         }
     }
