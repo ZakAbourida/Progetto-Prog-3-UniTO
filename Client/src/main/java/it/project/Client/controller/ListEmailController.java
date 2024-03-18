@@ -4,10 +4,12 @@ import it.project.Client.ApplicationClient;
 import it.project.lib.Email;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ public class ListEmailController {
     @FXML
     private Button btn_newarrivals;
     @FXML
-    private ListView listview_email;
+    private ListView<Email> listview_email;
 
 
     @FXML
@@ -35,6 +37,8 @@ public class ListEmailController {
         });
 
         //btn_newarrivals.setOnAction(event -> login());
+
+        listview_email.setOnMouseClicked(this::showSelectedEmail);
 
         // Configura il listener per la selezione nella ListView
         /*
@@ -77,12 +81,43 @@ public class ListEmailController {
 
             // Riempi la ListView con le email ricevute
             for (Email email : emails) {
-                String subject = email.getSubject();
-                String sender = email.getSender();
-                String itemText = "From: \t" + sender + "\t| Subject: \t" + subject;
-                listview_email.getItems().add(itemText);
+                listview_email.getItems().add(email);
             }
         }
     }
+    protected void showSelectedEmail(MouseEvent mouseEvent) {
+        // Ottieni l'email selezionata dalla ListView
+        Email selectedEmail = listview_email.getSelectionModel().getSelectedItem();
+
+        if (selectedEmail != null) {
+            // Deseleziona l'elemento selezionato nella ListView
+            listview_email.getSelectionModel().clearSelection();
+
+            // Carica il file FXML della finestra "email.fxml"
+            FXMLLoader loader = new FXMLLoader(ApplicationClient.class.getResource("email.fxml"));
+            Parent root;
+            try {
+                root = loader.load();
+            } catch (IOException e) {
+                System.out.println("ListEmailController - showSelectedEmail()");
+                e.printStackTrace();
+                return;
+            }
+
+            // Ottieni il controller della nuova finestra
+            OpenedEmailController OpEmailController = loader.getController();
+
+            // Passa le informazioni dell'email al controller della nuova finestra
+            OpEmailController.getDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText());
+
+            // Crea una nuova finestra
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dettagli Email || "+ selectedEmail.getSubject());
+            stage.show();
+        }
+    }
+
+
 
 }
