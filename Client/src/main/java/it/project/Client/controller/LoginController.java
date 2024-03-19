@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.EOFException;
@@ -28,9 +29,19 @@ public class LoginController {
     @FXML
     private Label lbl_error;
     private ListEmailController listEmailController;
+    private Client model;
 
     public void initialize() {
         btn_login.setOnAction(event -> login());
+        email_field.setOnKeyPressed((keyEvent)-> { //Lambda form EventHandler<KeyEvent>
+            if (keyEvent.getCode().equals(KeyCode.ENTER)){
+                login();
+            }
+        });
+    }
+
+    public void setModel(Client model) {
+        this.model = model;
     }
 
     private void login() {
@@ -48,31 +59,26 @@ public class LoginController {
 
         // Pulisci l'etichetta dell'errore prima di procedere
         lbl_error.setText("");
-        //crea il tipo di richiesta
-        RequestType type = new RequestType(email,1);
-        // Avvia un nuovo thread per connettersi al server
-        new Thread(() -> connectClient(type)).start();
+
+        //Ask model for login request
+
+        connectClient(email);
     }
 
-    private void connectClient(Object request) {
+    private void connectClient(String address) {
         try {
-            Client client = new Client("localhost", 4040, email_field.getText());
-            client.openConnection();
-            // Send the request to the server
-            Object response = client.sendRequest(request);
-            System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
+            List<Email> mailbox = model.sendLogin(address);
             listEmailController = new ListEmailController();
             // Dopo la connessione riuscita, cambia la vista.
             Platform.runLater(() -> {
                 try {
                     switchToEmailListView();
-                    listEmailController.fillReceivedEmail(response);
+                    listEmailController.fillReceivedEmail(mailbox);
                 } catch (IOException e) {
                     lbl_error.setText("Impossibile caricare listemail-view.fxml");
                     e.printStackTrace();
                 }
             });
-            client.close();
         } catch (Exception e) {
             Platform.runLater(() -> lbl_error.setText("Errore di connessione al server: offline"));
             e.printStackTrace();
@@ -90,6 +96,7 @@ public class LoginController {
         stage.setScene(scene);
         stage.setTitle(email_field.getText().trim());
         stage.show();
+        listEmailController.setModel(model);
     }
 
 }

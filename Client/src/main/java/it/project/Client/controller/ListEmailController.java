@@ -1,6 +1,7 @@
 package it.project.Client.controller;
 
 import it.project.Client.ApplicationClient;
+import it.project.Client.model.Client;
 import it.project.lib.Email;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +23,11 @@ public class ListEmailController {
     private Button btn_newarrivals;
     @FXML
     private ListView<Email> listview_email;
+    private Client model;
 
+    public void setModel(Client model) {
+        this.model = model;
+    }
 
     @FXML
     public void initialize() {
@@ -56,6 +61,7 @@ public class ListEmailController {
         Stage newStage = new Stage();
         newStage.setScene(scene);
         newStage.setTitle("New Email");
+        ((EmailController)fxmlLoader.getController()).setModel(model);
 
         // Mostra il nuovo stage
         newStage.show();
