@@ -30,6 +30,7 @@ public class LoginController {
     private Label lbl_error;
     private ListEmailController listEmailController;
     private Client model;
+    private LoginController lgn_controller;
 
     public void initialize() {
         btn_login.setOnAction(event -> login());
@@ -40,8 +41,9 @@ public class LoginController {
         });
     }
 
-    public void setModel(Client model) {
+    public void setModel(Client model, LoginController lg) {
         this.model = model;
+        this.lgn_controller = lg;
     }
 
     private void login() {
@@ -69,6 +71,8 @@ public class LoginController {
         try {
             List<Email> mailbox = model.sendLogin(address);
             listEmailController = new ListEmailController();
+            listEmailController.setLoginController(lgn_controller);
+
             // Dopo la connessione riuscita, cambia la vista.
             Platform.runLater(() -> {
                 try {

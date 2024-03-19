@@ -27,10 +27,13 @@ public class ListEmailController {
     private ListView<Email> listview_email;
     private Client model;
     private LoginController loginController;
+    private EmailController emailController;
+    private OpenedEmailController OpEmailController;
 
     public void setModel(Client model) {
         this.model = model;
     }
+    public void setLoginController(LoginController lg){this.loginController = lg;}
 
     @FXML
     public void initialize() {
@@ -56,20 +59,16 @@ public class ListEmailController {
                 throw new RuntimeException(e);
             }
         });
-
-        // Configura il listener per la selezione nella ListView
-        /*
-        listview_email.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            email_field.setText(newValue); // Mostra l'email selezionata in email_field
-        });
-        */
     }
+
 
     public void writeEmail() throws IOException {
         // Carica il file FXML per la nuova scena
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("email-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
+        //prendo l'EmailController della finestra
+        emailController = fxmlLoader.getController();
         // Crea un nuovo stage (finestra) per questa scena
         Stage newStage = new Stage();
         newStage.setScene(scene);
@@ -130,7 +129,7 @@ public class ListEmailController {
             }
 
             // Ottieni il controller della nuova finestra
-            OpenedEmailController OpEmailController = loader.getController();
+            OpEmailController = loader.getController();
 
             // Passa le informazioni dell'email al controller della nuova finestra
             OpEmailController.getDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText());
@@ -156,7 +155,13 @@ public class ListEmailController {
         stage.show();
 
         Client client = new Client();
-        ((LoginController)fxmlLoader.getController()).setModel(client);
+        ((LoginController)fxmlLoader.getController()).setModel(client, fxmlLoader.getController());
+    }
+
+    public void ReplyEmail(String sender, String subject) throws IOException {
+        writeEmail();
+        emailController.setEmailField(sender);
+        emailController.setSubjectField(subject);
     }
 
 }

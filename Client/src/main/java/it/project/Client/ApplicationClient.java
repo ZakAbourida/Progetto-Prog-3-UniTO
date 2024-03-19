@@ -19,7 +19,7 @@ public class ApplicationClient extends Application {
         stage.show();
 
         Client client = new Client();
-        ((LoginController)fxmlLoader.getController()).setModel(client);
+        ((LoginController)fxmlLoader.getController()).setModel(client, fxmlLoader.getController());
     }
 
     public static void main(String[] args) {

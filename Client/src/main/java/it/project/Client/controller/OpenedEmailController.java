@@ -25,6 +25,11 @@ public class OpenedEmailController {
     private Button btn_forward;
     @FXML
     private Button btn_reply;
+    private ListEmailController lstEmailController;
+
+    public void setLstEmailController(ListEmailController lstEmailController) {
+        this.lstEmailController = lstEmailController;
+    }
 
     public void initialize() {
         btn_cancel.setOnAction(actionEvent -> {
@@ -34,7 +39,12 @@ public class OpenedEmailController {
             forwardEmail();
         });
         btn_reply.setOnAction(actionEvent -> {
-            replyEmail();
+            try {
+                replyEmail();
+            } catch (IOException e) {
+                System.out.println("OpenedEmailController - replyEmail()");
+                throw new RuntimeException(e);
+            }
         });
         text_area_field.setEditable(false); // così il contenuto sarà READ_ONLY
     }
@@ -43,7 +53,9 @@ public class OpenedEmailController {
 
     public void forwardEmail() {/*TODO: DA COMPLETARE*/}
 
-    public void replyEmail() {/*TODO: DA COMPLETARE*/}
+    public void replyEmail() throws IOException {
+        lstEmailController.ReplyEmail(sender_text.toString(), subject_text.toString());
+    }
 
     public void getDetails(String sender, List<String> recipient, String subject, String text) {
         sender_text.setText(sender);
@@ -51,6 +63,8 @@ public class OpenedEmailController {
         subject_text.setText(subject);
         text_area_field.setText(text);
     }
+
+
 
 
 }

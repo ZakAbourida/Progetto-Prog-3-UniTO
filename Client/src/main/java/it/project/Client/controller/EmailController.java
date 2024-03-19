@@ -29,6 +29,8 @@ public class EmailController {
     public void setModel(Client model) {
         this.model = model;
     }
+    public void setEmailField(String email){this.field_email.setText(email);}
+    public void setSubjectField(String subject){this.field_subject.setText(subject);}
 
     public void initialize(){
         btn_send.setOnAction(actionEvent -> {sendEmail();});
