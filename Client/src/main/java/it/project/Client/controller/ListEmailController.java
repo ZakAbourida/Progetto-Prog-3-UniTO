@@ -7,13 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListEmailController {
@@ -24,11 +24,9 @@ public class ListEmailController {
     @FXML
     private ListView<Email> listview_email;
     private Client model;
-
     public void setModel(Client model) {
         this.model = model;
     }
-
     @FXML
     public void initialize() {
         // Qui puoi inizializzare la lista con alcuni dati o configurare comportamenti aggiuntivi
@@ -42,6 +40,7 @@ public class ListEmailController {
         });
 
         //btn_newarrivals.setOnAction(event -> login());
+
 
         listview_email.setOnMouseClicked(this::showSelectedEmail);
 
@@ -89,8 +88,13 @@ public class ListEmailController {
             for (Email email : emails) {
                 listview_email.getItems().add(email);
             }
+
+            listview_email.setCellFactory(param->new EmailListCell());
+            listview_email.refresh();
         }
     }
+
+
     protected void showSelectedEmail(MouseEvent mouseEvent) {
         // Ottieni l'email selezionata dalla ListView
         Email selectedEmail = listview_email.getSelectionModel().getSelectedItem();
@@ -123,7 +127,4 @@ public class ListEmailController {
             stage.show();
         }
     }
-
-
-
 }

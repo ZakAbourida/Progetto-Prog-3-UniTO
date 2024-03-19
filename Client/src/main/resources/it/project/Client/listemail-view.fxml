@@ -24,7 +24,7 @@
                         <Font size="16.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btn_newarrivals" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="New arrivals">
+                  <Button fx:id="btn_newarrivals" layoutX="15.0" layoutY="63.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Refresh">
                      <font>
                         <Font size="16.0" />
                      </font>

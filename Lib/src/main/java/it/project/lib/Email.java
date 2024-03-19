@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class Email implements Serializable {
     private String sender;
@@ -12,7 +15,7 @@ public class Email implements Serializable {
     private String subject;
     private String text;
     private String date;
-    private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy H:m:s");
+    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy H:m:s");
 
     public Email(String sender, List<String> recipients, String subject, String text) {
         this.sender = sender;
@@ -57,6 +60,7 @@ public class Email implements Serializable {
     public String getText() {
         return text;
     }
+    public String getDate(){return date;}
 
     public void setSender(String sender) {
         this.sender = sender;
@@ -75,6 +79,10 @@ public class Email implements Serializable {
     }
 
     public void setDate() {
-        this.date = format.format(Calendar.getInstance().getTime());
+        this.date = date;
+    }
+
+    public void setFormat(SimpleDateFormat format) {
+        this.format = format;
     }
 }
