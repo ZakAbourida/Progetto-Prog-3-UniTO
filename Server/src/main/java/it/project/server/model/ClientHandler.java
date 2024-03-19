@@ -47,33 +47,6 @@ public class ClientHandler implements Runnable {
             }
     }
 
-    /**
-     * System.out.println("Connesso: ");
-     *         while(true){
-     *             try {
-     *                 // Esempio: leggi una linea di testo e inviala indietro al client
-     *                 String line = in.readLine();
-     *                 out.println("Hai detto: " + line);
-     *                 //serverController.logConnection("Client connesso: "+line);
-     *
-     *             } catch (IOException e) {
-     *                 System.out.println("Errore nella gestione del client: " + e.getMessage());
-     *                 e.printStackTrace();
-     *             }
-     *
-     *             try {
-     *                 // Pulizia: chiudi gli stream e il socket
-     *                 in.close();
-     *                 out.close();
-     *                 clientSocket.close();
-     *                 //serverController.logConnection("Client disconnesso: ");
-     *             } catch (IOException e) {
-     *                 System.out.println("Errore nella gestione del client: " + e.getMessage());
-     *                 e.printStackTrace();
-     *             }
-     *         }
-     */
-
     public Object handleRequest(Object req) throws IOException, ClassNotFoundException {
         // Verifica se req è un'istanza di RequestType
         if (!(req instanceof RequestType)) {
