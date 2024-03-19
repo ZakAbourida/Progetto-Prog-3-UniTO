@@ -31,6 +31,7 @@ public class Client {
     public void sendEmail(Email email) {
         email.setRecipients(email.getRecipients().stream().filter(Client::isValidEmail).toList());
         email.setSender(this.email);
+        email.setDate();
         try {
             sendRequest(new RequestType(this.email, 2));
             output.writeObject(email);
