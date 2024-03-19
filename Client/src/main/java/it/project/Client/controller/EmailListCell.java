@@ -6,11 +6,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
+
 class EmailListCell extends ListCell<Email> {
     private final GridPane gridPane = new GridPane();
     private final Label senderLabel = new Label();
     private final Label subjectLabel = new Label();
     private final Label dateLabel = new Label();
+
     public EmailListCell() {
         super();
         // Imposta l'allineamento della griglia
@@ -42,7 +44,7 @@ class EmailListCell extends ListCell<Email> {
             senderLabel.setText(item.getSender());
             subjectLabel.setText(item.getSubject());
             dateLabel.setText(item.getDate());
-            System.out.println("email: "+item.getSender()+" "+item.getSubject()+" "+item.getDate());
+            //System.out.println("email: " + item.getSender() + " " + item.getSubject() + " " + item.getDate());
             // Aggiorna le dimensioni della griglia
             gridPane.setPrefWidth(getListView().getWidth() - 20);
             senderLabel.setPrefWidth(gridPane.getPrefWidth() * 0.25);

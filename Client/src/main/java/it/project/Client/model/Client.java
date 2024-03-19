@@ -18,6 +18,7 @@ public class Client {
     public Client() throws IOException {
         openConnection("127.0.0.1",4040);
     }
+    public Socket getSocket(){return socket;}
 
     private void sendRequest(Object request){
         try {

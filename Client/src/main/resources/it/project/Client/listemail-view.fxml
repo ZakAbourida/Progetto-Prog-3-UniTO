@@ -29,6 +29,11 @@
                         <Font size="16.0" />
                      </font>
                   </Button>
+                  <Button fx:id="btn_disconnect" layoutX="15.0" layoutY="320.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Disconnect">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.net.Socket;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,11 +22,16 @@ public class ListEmailController {
     @FXML
     private Button btn_newarrivals;
     @FXML
+    private Button btn_disconnect;
+    @FXML
     private ListView<Email> listview_email;
     private Client model;
+    private LoginController loginController;
+
     public void setModel(Client model) {
         this.model = model;
     }
+
     @FXML
     public void initialize() {
         // Qui puoi inizializzare la lista con alcuni dati o configurare comportamenti aggiuntivi
@@ -44,6 +49,14 @@ public class ListEmailController {
 
         listview_email.setOnMouseClicked(this::showSelectedEmail);
 
+        btn_disconnect.setOnAction(actionEvent -> {
+            try {
+                Disconnect();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         // Configura il listener per la selezione nella ListView
         /*
         listview_email.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -51,6 +64,7 @@ public class ListEmailController {
         });
         */
     }
+
     public void writeEmail() throws IOException {
         // Carica il file FXML per la nuova scena
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("email-view.fxml"));
@@ -60,16 +74,17 @@ public class ListEmailController {
         Stage newStage = new Stage();
         newStage.setScene(scene);
         newStage.setTitle("New Email");
-        ((EmailController)fxmlLoader.getController()).setModel(model);
+        ((EmailController) fxmlLoader.getController()).setModel(model);
 
         // Mostra il nuovo stage
         newStage.show();
     }
+
     @FXML
-    public void fillReceivedEmail(Object response){
+    public void fillReceivedEmail(Object response) {
         if (!(response instanceof List<?>))
             throw new IllegalArgumentException("Was expected a list of Email!");
-        else{
+        else {
             // Il cast è sicuro perché abbiamo verificato che l'oggetto sia una lista
             List<?> emailList = (List<?>) response;
 
@@ -90,10 +105,11 @@ public class ListEmailController {
                 listview_email.getItems().add(email);
             }
 
-            listview_email.setCellFactory(param->new EmailListCell());
+            listview_email.setCellFactory(param -> new EmailListCell());
             listview_email.refresh();
         }
     }
+
     protected void showSelectedEmail(MouseEvent mouseEvent) {
         // Ottieni l'email selezionata dalla ListView
         Email selectedEmail = listview_email.getSelectionModel().getSelectedItem();
@@ -122,8 +138,25 @@ public class ListEmailController {
             // Crea una nuova finestra
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Dettagli Email || "+ selectedEmail.getSubject());
+            stage.setTitle("Dettagli Email || " + selectedEmail.getSubject());
             stage.show();
         }
     }
+
+    public void Disconnect() throws IOException {
+        System.out.println("Disconnessione");
+        model.close();
+        // Carica il file FXML per la nuova scena
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("login-view.fxml"));
+
+        Stage stage = (Stage) btn_disconnect.getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.setTitle("Login");
+        stage.show();
+
+        Client client = new Client();
+        ((LoginController)fxmlLoader.getController()).setModel(client);
+    }
+
 }

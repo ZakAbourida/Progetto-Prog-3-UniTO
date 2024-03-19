@@ -25,7 +25,7 @@ public class Email implements Serializable {
     }
 
     public Email(String line) {
-        String[] parts = line.split(",",5);
+        String[] parts = line.split(",", 5);
         String[] recipients = parts[4].split(",");
         this.recipients = Arrays.stream(recipients).toList();
         this.sender = parts[0];
@@ -41,7 +41,7 @@ public class Email implements Serializable {
 
     @Override
     public String toString() {
-        return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients+"\n";
+        return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients + "\n";
     }
 
     // Getter methods to retrieve values of private variables
@@ -61,7 +61,10 @@ public class Email implements Serializable {
     public String getText() {
         return text;
     }
-    public String getDate(){return date;}
+
+    public String getDate() {
+        return date;
+    }
 
     public void setSender(String sender) {
         this.sender = sender;

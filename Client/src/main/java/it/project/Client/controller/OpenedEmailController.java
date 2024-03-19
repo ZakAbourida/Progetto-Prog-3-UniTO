@@ -26,26 +26,31 @@ public class OpenedEmailController {
     @FXML
     private Button btn_reply;
 
-    public void initialize(){
-        btn_cancel.setOnAction(actionEvent -> {cancelEmail();});
-        btn_forward.setOnAction(actionEvent -> {forwardEmail();});
-        btn_reply.setOnAction(actionEvent -> {replyEmail();});
+    public void initialize() {
+        btn_cancel.setOnAction(actionEvent -> {
+            cancelEmail();
+        });
+        btn_forward.setOnAction(actionEvent -> {
+            forwardEmail();
+        });
+        btn_reply.setOnAction(actionEvent -> {
+            replyEmail();
+        });
         text_area_field.setEditable(false); // così il contenuto sarà READ_ONLY
     }
 
-    public void cancelEmail(){/*TODO:DA COMPLETARE*/}
-    public void forwardEmail(){/*TODO: DA COMPLETARE*/}
-    public void replyEmail(){/*TODO: DA COMPLETARE*/}
+    public void cancelEmail() {/*TODO:DA COMPLETARE*/}
 
-    public void getDetails(String sender, List<String>recipient, String subject, String text) {
+    public void forwardEmail() {/*TODO: DA COMPLETARE*/}
+
+    public void replyEmail() {/*TODO: DA COMPLETARE*/}
+
+    public void getDetails(String sender, List<String> recipient, String subject, String text) {
         sender_text.setText(sender);
         receiver_text.setText(String.join(", ", recipient)); /* conversione lista stringhe in una stringa divisa da virgole*/
         subject_text.setText(subject);
         text_area_field.setText(text);
     }
-
-
-
 
 
 }
