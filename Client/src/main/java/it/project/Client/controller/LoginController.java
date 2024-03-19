@@ -62,27 +62,23 @@ public class LoginController {
 
         //Ask model for login request
 
-        connectClient(new RequestType(email,1));
+        connectClient(email);
     }
 
-    private void connectClient(Object request) {
+    private void connectClient(String address) {
         try {
-            model.openConnection("127.0.0.1",4040);
-            // Send the request to the server
-            Object response = model.sendRequest(request);
-            System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
+            List<Email> mailbox = model.sendLogin(address);
             listEmailController = new ListEmailController();
             // Dopo la connessione riuscita, cambia la vista.
             Platform.runLater(() -> {
                 try {
                     switchToEmailListView();
-                    listEmailController.fillReceivedEmail(response);
+                    listEmailController.fillReceivedEmail(mailbox);
                 } catch (IOException e) {
                     lbl_error.setText("Impossibile caricare listemail-view.fxml");
                     e.printStackTrace();
                 }
             });
-            model.close();
         } catch (Exception e) {
             Platform.runLater(() -> lbl_error.setText("Errore di connessione al server: offline"));
             e.printStackTrace();
@@ -100,6 +96,7 @@ public class LoginController {
         stage.setScene(scene);
         stage.setTitle(email_field.getText().trim());
         stage.show();
+        listEmailController.setModel(model);
     }
 
 }

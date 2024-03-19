@@ -1,5 +1,6 @@
 package it.project.Client.controller;
 
+import it.project.Client.model.Client;
 import it.project.lib.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,9 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 public class EmailController {
 
@@ -25,6 +24,11 @@ public class EmailController {
     @FXML
     private TextField field_text;
 
+    private Client model;
+
+    public void setModel(Client model) {
+        this.model = model;
+    }
 
     public void initialize(){
         btn_send.setOnAction(actionEvent -> {sendEmail();});
@@ -47,9 +51,7 @@ public class EmailController {
         email.setText(field_text.getText());       // Imposta il testo dell'email
 
         // Qui va il codice per l'invio effettivo dell'email
-        /**
-         * @todo
-         */
+        model.sendEmail(email);
 
         //Dobbiamo fare in modo che quando inviamo l'email al server, se la riceve correttamente il server deve restituire true al contrario se non la riceve correttamente riceve false ,
         //in modo tale da attivare il pop-up nella maniera corretta.

@@ -1,11 +1,12 @@
 package it.project.Client.model;
 
+import it.project.lib.Email;
 import it.project.lib.RequestType;
 
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.net.SocketException;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Client {
@@ -14,23 +15,39 @@ public class Client {
     private ObjectOutputStream output = null;
     private String email;
 
-    /*public void sendMessage(String message) {
-        output.println(message);
-    }*/
+    public Client() throws IOException {
+        openConnection("127.0.0.1",4040);
+    }
 
-    public Object sendRequest(Object request) throws IOException, ClassNotFoundException {
+    private void sendRequest(Object request){
         try {
             // Invia la richiesta al server
             output.writeObject(request);
-            output.flush();
-            // Ricevi la risposta dal server
-            Object response = input.readObject();
-            System.out.println("CLIENT ==> Il server ha risposto: " + response);
-            return response;
-        } catch (SocketException | NullPointerException | EOFException e) {
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
-        return null;
+    }
+
+    public void sendEmail(Email email) {
+        email.setRecipients(email.getRecipients().stream().filter(Client::isValidEmail).toList());
+        email.setSender(this.email);
+        try {
+            sendRequest(new RequestType(this.email, 2));
+            output.writeObject(email);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Email> sendLogin(String address){
+        this.email  = address;
+        sendRequest(new RequestType(address,1));
+        try {
+            Object response = input.readObject();
+            return (List<Email>) response;
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void openConnection(String address,int port) throws IOException {
@@ -38,7 +55,6 @@ public class Client {
             socket = new Socket(address, port);
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
-            output.flush();
         } catch (ConnectException e) {
             System.err.println("Connection error: " + e.getMessage());
         }}

@@ -25,20 +25,22 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
             try {
-                // Esempio: leggi una linea di testo e inviala indietro al client
-                // Receive the request from the client
-                Object request = in.readObject();
-                // Manage the request
-                Object response = handleRequest(request);
-                // Send the response to the client
-                out.writeObject(response);
-                serverController.logConnection("Client connesso: ");
+                while(true) {
+                    // Esempio: leggi una linea di testo e inviala indietro al client
+                    // Receive the request from the client
+                    Object request = in.readObject();
+                    // Manage the request
+                    Object response = handleRequest(request);
+                    // Send the response to the client
+                    out.writeObject(response);
+                    serverController.logConnection("Client connesso: ");
+                }
 
                 // Pulizia: chiudi gli stream e il socket
-                in.close();
+                /*in.close();
                 out.close();
                 clientSocket.close();
-                serverController.logConnection("Client disconnesso: ");
+                serverController.logConnection("Client disconnesso: ");*/
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Errore nella gestione del client: " + e.getMessage());
                 e.printStackTrace();
