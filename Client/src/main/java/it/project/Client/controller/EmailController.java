@@ -2,6 +2,7 @@ package it.project.Client.controller;
 
 import it.project.Client.model.Client;
 import it.project.lib.Email;
+import it.project.lib.RequestType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -54,9 +55,9 @@ public class EmailController {
 
         // Qui va il codice per l'invio effettivo dell'email
         model.sendEmail(email);
-
         //Dobbiamo fare in modo che quando inviamo l'email al server, se la riceve correttamente il server deve restituire true al contrario se non la riceve correttamente riceve false ,
         //in modo tale da attivare il pop-up nella maniera corretta.
+
         boolean isSent = true; // Simula l'invio dell'email
 
         if (isSent) {

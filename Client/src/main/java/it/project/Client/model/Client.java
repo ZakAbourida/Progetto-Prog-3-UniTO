@@ -52,6 +52,31 @@ public class Client {
         }
     }
 
+
+    public List<Email> receivedEmail(String address) {
+        sendRequest(new RequestType(address, 3)); // Invio la richiesta al server
+        try {
+            Object response = input.readObject(); // Leggo la risposta
+
+            // Verifico che la risposta sia una List di Email
+            if (response instanceof List<?>) {
+                // Effettuo un ulteriore controllo per confermare che gli elementi siano Email
+                List<Email> emails = (List<Email>) response;
+                for (Object item : emails) {
+                    if (!(item instanceof Email)) {
+                        throw new RuntimeException("La lista contiene un oggetto che non è un'Email");
+                    }
+                }
+                return emails;
+            } else {
+                throw new RuntimeException("La risposta attesa era una List<Email> ma è stato ricevuto un tipo diverso");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            // Combina la gestione di IOException e ClassNotFoundException
+            throw new RuntimeException("Errore durante la ricezione delle email", e);
+        }
+    }
+
     public void openConnection(String address,int port) throws IOException {
         try {
             socket = new Socket(address, port);
@@ -92,4 +117,5 @@ public class Client {
         Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         return pattern.matcher(email).matches();
     }
+
 }
