@@ -80,7 +80,8 @@ public class ListEmailController {
             }
             //emailList dunque contiene solo Email
             List<Email> emails = (List<Email>) emailList;
-
+            // Ordina la lista delle email per data (dalla più recente alla meno recente)
+            emails.sort(Comparator.comparing(Email::getDate).reversed());
             // pulizia ListView prima di riempirla con le email
             listview_email.getItems().clear();
 
@@ -93,8 +94,6 @@ public class ListEmailController {
             listview_email.refresh();
         }
     }
-
-
     protected void showSelectedEmail(MouseEvent mouseEvent) {
         // Ottieni l'email selezionata dalla ListView
         Email selectedEmail = listview_email.getSelectionModel().getSelectedItem();

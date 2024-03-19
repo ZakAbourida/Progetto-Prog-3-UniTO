@@ -30,6 +30,7 @@ public class OpenedEmailController {
         btn_cancel.setOnAction(actionEvent -> {cancelEmail();});
         btn_forward.setOnAction(actionEvent -> {forwardEmail();});
         btn_reply.setOnAction(actionEvent -> {replyEmail();});
+        text_area_field.setEditable(false); // così il contenuto sarà READ_ONLY
     }
 
     public void cancelEmail(){/*TODO:DA COMPLETARE*/}

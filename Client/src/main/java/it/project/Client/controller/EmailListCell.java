@@ -42,6 +42,7 @@ class EmailListCell extends ListCell<Email> {
             senderLabel.setText(item.getSender());
             subjectLabel.setText(item.getSubject());
             dateLabel.setText(item.getDate());
+            System.out.println("email: "+item.getSender()+" "+item.getSubject()+" "+item.getDate());
             // Aggiorna le dimensioni della griglia
             gridPane.setPrefWidth(getListView().getWidth() - 20);
             senderLabel.setPrefWidth(gridPane.getPrefWidth() * 0.25);

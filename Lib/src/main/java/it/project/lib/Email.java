@@ -30,7 +30,8 @@ public class Email implements Serializable {
         this.recipients = Arrays.stream(recipients).toList();
         this.sender = parts[0];
         this.subject = parts[1];
-        this.text = parts[3];
+        this.text = parts[2];
+        this.date = parts[3];
     }
 
     //costruttore vuoto temporaneo o forse no
@@ -40,7 +41,7 @@ public class Email implements Serializable {
 
     @Override
     public String toString() {
-        return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients;
+        return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients+"\n";
     }
 
     // Getter methods to retrieve values of private variables
@@ -79,7 +80,7 @@ public class Email implements Serializable {
     }
 
     public void setDate() {
-        this.date = date;
+        this.date = this.format.format(new Date());
     }
 
     public void setFormat(SimpleDateFormat format) {
