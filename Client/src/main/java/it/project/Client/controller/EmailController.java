@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 
 import java.util.Collections;
 
@@ -63,14 +64,17 @@ public class EmailController {
 
         if (isSent) {
             // Mostra un Alert di successo se l'email è stata inviata correttamente
-            Alert alert = new Alert(AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Email Inviata");
             alert.setHeaderText(null);
             alert.setContentText("L'email è stata inviata con successo!");
             alert.showAndWait();
+
+            // Chiude lo stage della email dopo che l'alert è stato chiuso
+            ((Stage)field_email.getScene().getWindow()).close();
         } else {
             // Mostra un Alert di errore se l'invio dell'email non è riuscito
-            Alert alert = new Alert(AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Errore Invio Email");
             alert.setHeaderText("Impossibile inviare l'email");
             alert.setContentText("Si è verificato un errore durante l'invio dell'email. Riprova.");
