@@ -44,7 +44,7 @@ public class ServerController {
         }
     }*/
 
-    public void logConnection(String message) {
+    public void logMessages(String message) {
         Platform.runLater(() -> listserver_view.getItems().add(message));
     }
 

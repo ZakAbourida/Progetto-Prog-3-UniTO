@@ -5,6 +5,7 @@ import it.project.Client.model.Client;
 import it.project.lib.Email;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ListEmailController {
     @FXML
@@ -26,14 +29,14 @@ public class ListEmailController {
     @FXML
     private ListView<Email> listview_email;
     private Client model;
-    private LoginController loginController;
     private EmailController emailController;
     private OpenedEmailController OpEmailController;
+    private ListEmailController lst_em; //sé stesso
 
     public void setModel(Client model) {
         this.model = model;
     }
-    public void setLoginController(LoginController lg){this.loginController = lg;}
+    public void setListEmailController(ListEmailController lg){this.lst_em = lg;}
 
     @FXML
     public void initialize() {
@@ -47,7 +50,9 @@ public class ListEmailController {
             }
         });
 
-        //btn_newarrivals.setOnAction(event -> login());
+        btn_newarrivals.setOnAction(actionEvent -> {
+            UpdateEmail();
+        });
 
 
         listview_email.setOnMouseClicked(this::showSelectedEmail);
@@ -131,8 +136,10 @@ public class ListEmailController {
             // Ottieni il controller della nuova finestra
             OpEmailController = loader.getController();
 
+            OpEmailController.setListEmailController(lst_em);
+
             // Passa le informazioni dell'email al controller della nuova finestra
-            OpEmailController.getDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText());
+            OpEmailController.setDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText());
 
             // Crea una nuova finestra
             Stage stage = new Stage();
@@ -162,6 +169,25 @@ public class ListEmailController {
         writeEmail();
         emailController.setEmailField(sender);
         emailController.setSubjectField(subject);
+    }
+
+    public void UpdateEmail() {
+        try {
+            // Ottieni l'indirizzo email dal titolo dello stage
+            Stage stage  = (Stage) listview_email.getScene().getWindow();
+            String email = stage.titleProperty().getValue();
+
+
+            List<Email> updatedEmails = model.receivedEmail(email); // Utilizza receivedEmail
+
+            // Utilizza il metodo fillReceivedEmail per aggiornare la ListView
+            fillReceivedEmail(updatedEmails);
+        } catch (Exception e) {
+            // Log dell'errore o mostra un messaggio all'utente
+            e.printStackTrace();
+            // Potresti voler mostrare un dialogo di errore all'utente, per esempio:
+            // showErrorDialog("Impossibile aggiornare le email.");
+        }
     }
 
 }

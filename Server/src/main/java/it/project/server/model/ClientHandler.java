@@ -33,7 +33,6 @@ public class ClientHandler implements Runnable {
                     Object response = handleRequest(request);
                     // Send the response to the client
                     out.writeObject(response);
-                    serverController.logConnection("Client connesso: ");
                 }
 
                 // Pulizia: chiudi gli stream e il socket
@@ -70,7 +69,7 @@ public class ClientHandler implements Runnable {
     }
 
     public RequestType handleLoginRequest(RequestType request) throws IOException {
-        serverController.logConnection("Client connesso: "+request.getEmail());
+        serverController.logMessages("Client connesso: "+request.getEmail());
         Mailbox m = server.getBox(request.getEmail());
         out.writeObject(m.getMessages());
         return request;
@@ -85,6 +84,7 @@ public class ClientHandler implements Runnable {
             box.addMessage((Email) mail);
             box.writeMailbox(); //TODO better caching and transactions
         }
+        serverController.logMessages("Email inviata da: "+request.getEmail());
         return request;
     }
     public RequestType handleReceiveEmailRequest(RequestType request) throws IOException {

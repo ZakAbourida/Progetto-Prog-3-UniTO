@@ -27,8 +27,8 @@ public class OpenedEmailController {
     private Button btn_reply;
     private ListEmailController lstEmailController;
 
-    public void setLstEmailController(ListEmailController lstEmailController) {
-        this.lstEmailController = lstEmailController;
+    public void setListEmailController(ListEmailController lst_controller) {
+        this.lstEmailController = lst_controller;
     }
 
     public void initialize() {
@@ -54,10 +54,10 @@ public class OpenedEmailController {
     public void forwardEmail() {/*TODO: DA COMPLETARE*/}
 
     public void replyEmail() throws IOException {
-        lstEmailController.ReplyEmail(sender_text.toString(), subject_text.toString());
+        lstEmailController.ReplyEmail(sender_text.getText(), "Risposta a: "+subject_text.getText());
     }
 
-    public void getDetails(String sender, List<String> recipient, String subject, String text) {
+    public void setDetails(String sender, List<String> recipient, String subject, String text) {
         sender_text.setText(sender);
         receiver_text.setText(String.join(", ", recipient)); /* conversione lista stringhe in una stringa divisa da virgole*/
         subject_text.setText(subject);
