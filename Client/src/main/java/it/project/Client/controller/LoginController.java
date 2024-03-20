@@ -71,7 +71,6 @@ public class LoginController {
         try {
             List<Email> mailbox = model.sendLogin(address);
             listEmailController = new ListEmailController();
-            listEmailController.setLoginController(lgn_controller);
 
             // Dopo la connessione riuscita, cambia la vista.
             Platform.runLater(() -> {
@@ -95,6 +94,7 @@ public class LoginController {
 
         // Ottiene lo stage corrente (dalla finestra attuale) e imposta la nuova scena
         fxmlLoader.setController(listEmailController);
+        listEmailController.setListEmailController(fxmlLoader.getController());
         Stage stage = (Stage) btn_login.getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);

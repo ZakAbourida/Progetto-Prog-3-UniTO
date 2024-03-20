@@ -29,14 +29,14 @@ public class ListEmailController {
     @FXML
     private ListView<Email> listview_email;
     private Client model;
-    private LoginController loginController;
     private EmailController emailController;
     private OpenedEmailController OpEmailController;
+    private ListEmailController lst_em; //sé stesso
 
     public void setModel(Client model) {
         this.model = model;
     }
-    public void setLoginController(LoginController lg){this.loginController = lg;}
+    public void setListEmailController(ListEmailController lg){this.lst_em = lg;}
 
     @FXML
     public void initialize() {
@@ -136,8 +136,10 @@ public class ListEmailController {
             // Ottieni il controller della nuova finestra
             OpEmailController = loader.getController();
 
+            OpEmailController.setListEmailController(lst_em);
+
             // Passa le informazioni dell'email al controller della nuova finestra
-            OpEmailController.getDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText());
+            OpEmailController.setDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText());
 
             // Crea una nuova finestra
             Stage stage = new Stage();
