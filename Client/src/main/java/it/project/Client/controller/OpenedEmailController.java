@@ -25,6 +25,8 @@ public class OpenedEmailController {
     private Button btn_forward;
     @FXML
     private Button btn_reply;
+    @FXML
+    private Label dateTime_text;
     private ListEmailController lstEmailController;
 
     public void setListEmailController(ListEmailController lst_controller) {
@@ -36,7 +38,12 @@ public class OpenedEmailController {
             cancelEmail();
         });
         btn_forward.setOnAction(actionEvent -> {
-            forwardEmail();
+            try {
+                forwardEmail();
+            } catch (IOException e) {
+                System.out.println("OpenedEmailController - forwardEmail()");
+                throw new RuntimeException(e);
+            }
         });
         btn_reply.setOnAction(actionEvent -> {
             try {
@@ -49,19 +56,24 @@ public class OpenedEmailController {
         text_area_field.setEditable(false); // così il contenuto sarà READ_ONLY
     }
 
-    public void cancelEmail() {/*TODO:DA COMPLETARE*/}
-
-    public void forwardEmail() {/*TODO: DA COMPLETARE*/}
-
-    public void replyEmail() throws IOException {
-        lstEmailController.ReplyEmail(sender_text.getText(), "Risposta a: "+subject_text.getText());
+    public void cancelEmail() {
+        lstEmailController.CancelEmail(sender_text.getText(), subject_text.getText(), dateTime_text.getText());
     }
 
-    public void setDetails(String sender, List<String> recipient, String subject, String text) {
+    public void forwardEmail() throws IOException {
+        lstEmailController.ForwardEmail(sender_text.getText(), subject_text.getText(), "Forwarded - \n"+text_area_field.getText());
+    }
+
+    public void replyEmail() throws IOException {
+        lstEmailController.ReplyEmail(sender_text.getText(), "Reply to: "+subject_text.getText());
+    }
+
+    public void setDetails(String sender, List<String> recipient, String subject, String text, String date) {
         sender_text.setText(sender);
         receiver_text.setText(String.join(", ", recipient)); /* conversione lista stringhe in una stringa divisa da virgole*/
         subject_text.setText(subject);
         text_area_field.setText(text);
+        dateTime_text.setText(date);
     }
 
 

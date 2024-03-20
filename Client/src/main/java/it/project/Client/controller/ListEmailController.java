@@ -36,7 +36,10 @@ public class ListEmailController {
     public void setModel(Client model) {
         this.model = model;
     }
-    public void setListEmailController(ListEmailController lg){this.lst_em = lg;}
+
+    public void setListEmailController(ListEmailController lg) {
+        this.lst_em = lg;
+    }
 
     @FXML
     public void initialize() {
@@ -139,7 +142,7 @@ public class ListEmailController {
             OpEmailController.setListEmailController(lst_em);
 
             // Passa le informazioni dell'email al controller della nuova finestra
-            OpEmailController.setDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText());
+            OpEmailController.setDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText(), selectedEmail.getDate());
 
             // Crea una nuova finestra
             Stage stage = new Stage();
@@ -162,7 +165,7 @@ public class ListEmailController {
         stage.show();
 
         Client client = new Client();
-        ((LoginController)fxmlLoader.getController()).setModel(client, fxmlLoader.getController());
+        ((LoginController) fxmlLoader.getController()).setModel(client, fxmlLoader.getController());
     }
 
     public void ReplyEmail(String sender, String subject) throws IOException {
@@ -171,10 +174,17 @@ public class ListEmailController {
         emailController.setSubjectField(subject);
     }
 
+    public void ForwardEmail(String sender, String subject, String text) throws IOException {
+        writeEmail();
+        emailController.setEmailField(sender);
+        emailController.setSubjectField(subject);
+        emailController.setTextField(text);
+    }
+
     public void UpdateEmail() {
         try {
             // Ottieni l'indirizzo email dal titolo dello stage
-            Stage stage  = (Stage) listview_email.getScene().getWindow();
+            Stage stage = (Stage) listview_email.getScene().getWindow();
             String email = stage.titleProperty().getValue();
 
 
@@ -188,6 +198,24 @@ public class ListEmailController {
             // Potresti voler mostrare un dialogo di errore all'utente, per esempio:
             // showErrorDialog("Impossibile aggiornare le email.");
         }
+    }
+
+    public void CancelEmail(String sender, String subject, String date) {
+        boolean found = false;
+        for (Email email : listview_email.getItems()) {
+            if (email.getSender().equals(sender) && email.getSubject().equals(subject) && email.getDate().equals(date)) {
+                // Trovata l'email corrispondente
+                model.cancelEmail(email);
+                found = true;
+                return; // Esce dal ciclo una volta trovata l'email corrispondente
+            }
+        }
+        if (found == false)
+            System.out.println("Nessuna email corrispondente trovata.");
+        else
+            System.out.println("Email corrispondente trovata.");
+
+        //TODO: FARE REFRESH PER AGGIORNARE LA MAILBOX
     }
 
 }

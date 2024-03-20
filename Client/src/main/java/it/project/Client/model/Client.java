@@ -16,11 +16,14 @@ public class Client {
     private String email;
 
     public Client() throws IOException {
-        openConnection("127.0.0.1",4040);
+        openConnection("127.0.0.1", 4040);
     }
-    public Socket getSocket(){return socket;}
 
-    private void sendRequest(Object request){
+    public Socket getSocket() {
+        return socket;
+    }
+
+    private void sendRequest(Object request) {
         try {
             // Invia la richiesta al server
             output.writeObject(request);
@@ -41,9 +44,9 @@ public class Client {
         }
     }
 
-    public List<Email> sendLogin(String address){
-        this.email  = address;
-        sendRequest(new RequestType(address,1));
+    public List<Email> sendLogin(String address) {
+        this.email = address;
+        sendRequest(new RequestType(address, 1));
         try {
             Object response = input.readObject();
             return (List<Email>) response;
@@ -52,6 +55,27 @@ public class Client {
         }
     }
 
+    public void cancelEmail(Email email) {
+        try {
+            sendRequest(new RequestType(this.email, 4));
+            output.writeObject(email);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        // Attendo la risposta e la gestisco
+        try {
+            Object response = input.readObject();
+            System.out.println("RISPOSTA DAL SERVER: "+response);
+            if (response instanceof String) {
+                String message = (String) response;
+                System.out.println(message);
+            } else {
+                throw new IllegalArgumentException("Response type not recognized.");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public List<Email> receivedEmail(String address) {
         sendRequest(new RequestType(address, 3)); // Invio la richiesta al server
@@ -77,14 +101,15 @@ public class Client {
         }
     }
 
-    public void openConnection(String address,int port) throws IOException {
+    public void openConnection(String address, int port) throws IOException {
         try {
             socket = new Socket(address, port);
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
         } catch (ConnectException e) {
             System.err.println("Connection error: " + e.getMessage());
-        }}
+        }
+    }
 
     public void close() {
         try {

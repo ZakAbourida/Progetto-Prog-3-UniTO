@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="338.0" prefWidth="423.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.project.Client.controller.OpenedEmailController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="515.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.project.Client.controller.OpenedEmailController">
    <top>
       <VBox prefHeight="93.0" prefWidth="423.0" BorderPane.alignment="CENTER">
          <children>
@@ -20,7 +19,7 @@
                         <Insets bottom="1.0" left="5.0" right="4.0" top="2.0" />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="sender_text" text="Sender@edu.it" />
+                  <Label fx:id="sender_text" prefHeight="17.0" prefWidth="361.0" text="Sender@edu.it" />
                </children>
                <VBox.margin>
                   <Insets bottom="1.0" left="8.0" right="4.0" top="10.0" />
@@ -33,7 +32,7 @@
                         <Insets bottom="1.0" left="5.0" right="4.0" top="2.0" />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="receiver_text" text="Receiver@edu.it">
+                  <Label fx:id="receiver_text" prefHeight="17.0" prefWidth="359.0" text="Receiver@edu.it">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -50,7 +49,7 @@
                         <Insets bottom="1.0" left="5.0" right="4.0" top="2.0" />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="subject_text" text="Subject of the email">
+                  <Label fx:id="subject_text" prefHeight="17.0" prefWidth="361.0" text="Subject of the email">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -60,21 +59,26 @@
                   <Insets bottom="1.0" left="8.0" right="4.0" top="1.0" />
                </VBox.margin>
             </HBox>
+            <Label fx:id="dateTime_text" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="205.0" text="Date&amp;Time" textAlignment="RIGHT">
+               <VBox.margin>
+                  <Insets left="300.0" />
+               </VBox.margin>
+            </Label>
          </children>
       </VBox>
    </top>
    <bottom>
-      <HBox prefHeight="59.0" prefWidth="423.0" spacing="50.0" BorderPane.alignment="CENTER">
+      <HBox alignment="TOP_CENTER" prefHeight="59.0" prefWidth="466.0" spacing="50.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btn_cancel" mnemonicParsing="false" text="Cancel" />
-            <Button fx:id="btn_forward" mnemonicParsing="false" text="Forward" />
-            <Button fx:id="btn_reply" mnemonicParsing="false" text="Reply" />
+            <Button fx:id="btn_cancel" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="btn_forward" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Forward" />
+            <Button fx:id="btn_reply" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Reply" />
          </children>
          <BorderPane.margin>
             <Insets top="3.0" />
          </BorderPane.margin>
          <padding>
-            <Insets left="75.0" top="16.0" />
+            <Insets top="16.0" />
          </padding>
       </HBox>
    </bottom>
