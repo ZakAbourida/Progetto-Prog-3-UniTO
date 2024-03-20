@@ -32,15 +32,21 @@ public class Client {
         }
     }
 
-    public void sendEmail(Email email) {
+    public boolean sendEmail(Email email) {
+        // Filtra i destinatari validi prima di inviare l'email
         email.setRecipients(email.getRecipients().stream().filter(Client::isValidEmail).toList());
-        email.setSender(this.email);
-        email.setDate();
+        email.setSender(this.email); // Imposta il mittente dell'email
+        email.setDate(); // Imposta la data corrente come data di invio
+
         try {
-            sendRequest(new RequestType(this.email, 2));
-            output.writeObject(email);
+            sendRequest(new RequestType(this.email, 2)); // Invia la richiesta al server
+            output.writeObject(email); // Invia l'oggetto Email
+            return true; // L'invio è riuscito
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            // Log dell'errore per scopi di debug o di tracciamento
+            e.printStackTrace();
+            // Restituisce false poiché l'invio non è riuscito a causa di un'eccezione
+            return false;
         }
     }
 

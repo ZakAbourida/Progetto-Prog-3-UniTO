@@ -60,7 +60,7 @@ public class EmailController {
         //Dobbiamo fare in modo che quando inviamo l'email al server, se la riceve correttamente il server deve restituire true al contrario se non la riceve correttamente riceve false ,
         //in modo tale da attivare il pop-up nella maniera corretta.
 
-        boolean isSent = true; // Simula l'invio dell'email
+        boolean isSent = model.sendEmail(email); // Simula l'invio dell'email
 
         if (isSent) {
             // Mostra un Alert di successo se l'email è stata inviata correttamente
