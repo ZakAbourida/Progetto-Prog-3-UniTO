@@ -36,7 +36,12 @@ public class OpenedEmailController {
             cancelEmail();
         });
         btn_forward.setOnAction(actionEvent -> {
-            forwardEmail();
+            try {
+                forwardEmail();
+            } catch (IOException e) {
+                System.out.println("OpenedEmailController - forwardEmail()");
+                throw new RuntimeException(e);
+            }
         });
         btn_reply.setOnAction(actionEvent -> {
             try {
@@ -51,10 +56,12 @@ public class OpenedEmailController {
 
     public void cancelEmail() {/*TODO:DA COMPLETARE*/}
 
-    public void forwardEmail() {/*TODO: DA COMPLETARE*/}
+    public void forwardEmail() throws IOException {
+        lstEmailController.ForwardEmail(sender_text.getText(), subject_text.getText(), "Forwarded - \n"+text_area_field.getText());
+    }
 
     public void replyEmail() throws IOException {
-        lstEmailController.ReplyEmail(sender_text.getText(), "Risposta a: "+subject_text.getText());
+        lstEmailController.ReplyEmail(sender_text.getText(), "Reply to: "+subject_text.getText());
     }
 
     public void setDetails(String sender, List<String> recipient, String subject, String text) {

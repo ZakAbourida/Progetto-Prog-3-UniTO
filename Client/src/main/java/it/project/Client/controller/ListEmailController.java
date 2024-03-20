@@ -170,6 +170,12 @@ public class ListEmailController {
         emailController.setEmailField(sender);
         emailController.setSubjectField(subject);
     }
+    public void ForwardEmail(String sender, String subject, String text) throws IOException {
+        writeEmail();
+        emailController.setEmailField(sender);
+        emailController.setSubjectField(subject);
+        emailController.setTextField(text);
+    }
 
     public void UpdateEmail() {
         try {

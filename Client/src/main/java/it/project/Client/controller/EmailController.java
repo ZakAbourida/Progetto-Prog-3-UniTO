@@ -32,6 +32,7 @@ public class EmailController {
     }
     public void setEmailField(String email){this.field_email.setText(email);}
     public void setSubjectField(String subject){this.field_subject.setText(subject);}
+    public void setTextField(String text){this.field_text.setText(text);}
 
     public void initialize(){
         btn_send.setOnAction(actionEvent -> {sendEmail();});
