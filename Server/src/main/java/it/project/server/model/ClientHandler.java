@@ -25,16 +25,14 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        try {
-            while (true) {
-                // Esempio: leggi una linea di testo e inviala indietro al client
-                // Receive the request from the client
-                Object request = in.readObject();
-                // Manage the request
-                Object response = handleRequest(request);
-                // Send the response to the client
-                out.writeObject(response);
-            }
+            try {
+                while(true) {
+                    // Esempio: leggi una linea di testo e inviala indietro al client
+                    // Receive the request from the client
+                    Object request = in.readObject();
+                    // Manage the request
+                    handleRequest(request);
+                }
 
             // Pulizia: chiudi gli stream e il socket
                 /*in.close();
@@ -47,7 +45,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public Object handleRequest(Object req) throws IOException, ClassNotFoundException {
+    public void handleRequest(Object req) throws IOException, ClassNotFoundException {
         // Verifica se req è un'istanza di RequestType
         if (!(req instanceof RequestType)) {
             throw new IllegalArgumentException("Richiesta non valida");
@@ -57,54 +55,49 @@ public class ClientHandler implements Runnable {
 
         switch (richiesta.getType()) {
             case 1: // Login request
-                return handleLoginRequest(richiesta);
+                handleLoginRequest(richiesta);
             case 2: // Send email request
-                return handleSendEmailRequest(richiesta);
+                handleSendEmailRequest(richiesta);
             case 3: // Receive email request
-                return handleReceiveEmailRequest(richiesta);
+                handleReceiveEmailRequest(richiesta);
             case 4: // Delete email request
-                return handleDeleteEmailRequest(richiesta); // Restituisce direttamente un booleano
+                handleDeleteEmailRequest(richiesta);
             default:
                 throw new IllegalArgumentException("Tipo di richiesta non supportato");
         }
     }
 
-
-    public RequestType handleLoginRequest(RequestType request) throws IOException {
-        serverController.logMessages("Client connesso: " + request.getEmail());
+    public void handleLoginRequest(RequestType request) throws IOException {
+        serverController.logMessages("Client connesso: "+request.getEmail());
         Mailbox m = server.getBox(request.getEmail());
         out.writeObject(m.getMessages());
-        return request;
     }
-
-    public RequestType handleSendEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
+    public void handleSendEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
         Object mail = in.readObject();
-        if (!(mail instanceof Email)) {
+        if (!(mail instanceof Email)){
             throw new IllegalArgumentException("An email is expected after a send request");
         }
-        for (String recipient : ((Email) mail).getRecipients()) {
+        for (String recipient: ((Email)mail).getRecipients()){
             Mailbox box = server.getBox(recipient);
             box.addMessage((Email) mail);
             box.writeMailbox(); //TODO better caching and transactions
         }
-        serverController.logMessages("Email inviata da: " + request.getEmail());
-        return request;
+        serverController.logMessages("Email inviata da: "+request.getEmail());
     }
-
-    public RequestType handleReceiveEmailRequest(RequestType request) throws IOException {
+    public void handleReceiveEmailRequest(RequestType request) throws IOException {
         Mailbox m = server.getBox(request.getEmail());
+        m.readMailbox();
         out.writeObject(m.getMessages());
-        return request;
     }
-
-    public String handleDeleteEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
+    public void handleDeleteEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
         Object mail = in.readObject();
-        if (!(mail instanceof Email)) {
+        if (!(mail instanceof Email)){
             throw new IllegalArgumentException("An email is expected after a delete request");
         }
         Mailbox m = server.getBox(request.getEmail());
         m.removeMessage((Email) mail);
-        return "Email cancellata con successo.";
     }
+
+
 
 }
