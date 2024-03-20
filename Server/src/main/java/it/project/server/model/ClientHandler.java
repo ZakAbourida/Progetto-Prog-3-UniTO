@@ -57,9 +57,16 @@ public class ClientHandler implements Runnable {
             case 4: // Delete email request
                 handleDeleteEmailRequest(richiesta);
                 break;
+            case 5:
+                handleCloseConnection(richiesta);
+                break;
             default:
                 throw new IllegalArgumentException("Tipo di richiesta non supportato");
         }
+    }
+
+    private void handleCloseConnection(RequestType request) {
+        serverController.logMessages("Client disconnesso:" + request.getEmail());
     }
 
     public void handleLoginRequest(RequestType request) throws IOException {

@@ -111,8 +111,9 @@ public class Client {
         }
     }
 
-    public void close() {
+    public void close(String email) {
         try {
+            sendRequest(new RequestType(email,5));
             if (socket != null) {
                 socket.close();
             }
@@ -122,7 +123,6 @@ public class Client {
             if (output != null) {
                 output.close();
             }
-            System.out.println("Connessione chiusa.");
         } catch (IOException e) {
             System.out.println("Errore durante la chiusura della connessione: " + e.getMessage());
         }
