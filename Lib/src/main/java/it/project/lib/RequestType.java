@@ -10,7 +10,6 @@ public class RequestType implements Serializable {
                         * 3 -> receive email request
                         * 4 -> delete email request
                         */
-
     public RequestType(String email, int type) {
         this.email = email;
         this.type = type;
