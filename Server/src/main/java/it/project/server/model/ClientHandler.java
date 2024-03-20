@@ -25,20 +25,13 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-            try {
-                while(true) {
-                    // Esempio: leggi una linea di testo e inviala indietro al client
-                    // Receive the request from the client
-                    Object request = in.readObject();
-                    // Manage the request
-                    handleRequest(request);
-                }
-
-            // Pulizia: chiudi gli stream e il socket
-                /*in.close();
-                out.close();
-                clientSocket.close();
-                serverController.logConnection("Client disconnesso: ");*/
+        try {
+            while(true) {
+                // Receive the request from the client
+                Object request = in.readObject();
+                // Manage the request
+                handleRequest(request);
+            }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Errore nella gestione del client: " + e.getMessage());
             e.printStackTrace();
@@ -47,21 +40,23 @@ public class ClientHandler implements Runnable {
 
     public void handleRequest(Object req) throws IOException, ClassNotFoundException {
         // Verifica se req è un'istanza di RequestType
-        if (!(req instanceof RequestType)) {
+        if (!(req instanceof RequestType richiesta)) {
             throw new IllegalArgumentException("Richiesta non valida");
         }
-
-        RequestType richiesta = (RequestType) req;
 
         switch (richiesta.getType()) {
             case 1: // Login request
                 handleLoginRequest(richiesta);
+                break;
             case 2: // Send email request
                 handleSendEmailRequest(richiesta);
+                break;
             case 3: // Receive email request
                 handleReceiveEmailRequest(richiesta);
+                break;
             case 4: // Delete email request
                 handleDeleteEmailRequest(richiesta);
+                break;
             default:
                 throw new IllegalArgumentException("Tipo di richiesta non supportato");
         }
