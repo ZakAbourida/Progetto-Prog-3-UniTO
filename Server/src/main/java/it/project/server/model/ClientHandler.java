@@ -100,6 +100,7 @@ public class ClientHandler implements Runnable {
         m.removeMessage((Email) mail);
         m.writeMailbox();
         out.writeObject("Email successfully removed");
+        serverController.logMessages("Email successfully removed!");
     }
 
 

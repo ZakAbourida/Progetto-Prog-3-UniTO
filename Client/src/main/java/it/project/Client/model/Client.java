@@ -71,7 +71,6 @@ public class Client {
         // Attendo la risposta e la gestisco
         try {
             Object response = input.readObject();
-            System.out.println("RISPOSTA DAL SERVER: "+response);
             if (response instanceof String) {
                 String message = (String) response;
                 System.out.println(message);
