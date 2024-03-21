@@ -3,21 +3,17 @@ package it.project.Client.controller;
 import it.project.Client.ApplicationClient;
 import it.project.Client.model.Client;
 import it.project.lib.Email;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ListEmailController {
     @FXML
@@ -31,7 +27,7 @@ public class ListEmailController {
     private Client model;
     private EmailController emailController;
     private OpenedEmailController OpEmailController;
-    private ListEmailController lst_em; //sé stesso
+    private ListEmailController lst_em; // Sé stesso, anche se questa dichiarazione sembra non necessaria
 
     public void setModel(Client model) {
         this.model = model;
@@ -43,8 +39,7 @@ public class ListEmailController {
 
     @FXML
     public void initialize() {
-        // Qui puoi inizializzare la lista con alcuni dati o configurare comportamenti aggiuntivi
-        // Es: listview_email.getItems().addAll("Email 1", "Email 2", "Email 3");
+        // Configura l'azione del bottone per creare una nuova email
         btn_newemail.setOnAction(actionEvent -> {
             try {
                 writeEmail();
@@ -53,19 +48,32 @@ public class ListEmailController {
             }
         });
 
-        btn_newarrivals.setOnAction(actionEvent -> {
-            UpdateEmail();
-        });
+        // Configura l'azione del bottone per aggiornare la lista delle email
+        btn_newarrivals.setOnAction(actionEvent -> UpdateEmail());
 
-
+        // Imposta il comportamento per quando si clicca su un'email nella lista
         listview_email.setOnMouseClicked(this::showSelectedEmail);
 
+        // Configura l'azione del bottone per disconnettere l'utente
         btn_disconnect.setOnAction(actionEvent -> {
             try {
                 Disconnect();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+
+        // Gestisce la chiusura della finestra tramite il pulsante "X"
+        Platform.runLater(() -> {
+            Stage stage = (Stage) btn_disconnect.getScene().getWindow();
+            stage.setOnCloseRequest(event -> {
+                try {
+                    Disconnect(); // Chiama il tuo metodo Disconnect
+                } catch (IOException e) {
+                    e.printStackTrace(); // Stampa l'errore o gestiscilo come preferisci
+                    event.consume(); // Opzionale: previene la chiusura della finestra se ci sono problemi nella disconnessione
+                }
+            });
         });
     }
 
@@ -153,12 +161,13 @@ public class ListEmailController {
     }
 
     public void Disconnect() throws IOException {
-        System.out.println("Disconnessione");
-        model.close();
+        Stage stage = (Stage) listview_email.getScene().getWindow();
+        String email = stage.titleProperty().getValue();
+        model.close(email);
         // Carica il file FXML per la nuova scena
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("login-view.fxml"));
 
-        Stage stage = (Stage) btn_disconnect.getScene().getWindow();
+        //Stage stage = (Stage) btn_disconnect.getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.setTitle("Login");
@@ -195,8 +204,6 @@ public class ListEmailController {
         } catch (Exception e) {
             // Log dell'errore o mostra un messaggio all'utente
             e.printStackTrace();
-            // Potresti voler mostrare un dialogo di errore all'utente, per esempio:
-            // showErrorDialog("Impossibile aggiornare le email.");
         }
     }
 
