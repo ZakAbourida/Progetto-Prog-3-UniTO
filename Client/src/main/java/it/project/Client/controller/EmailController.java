@@ -55,8 +55,6 @@ public class EmailController {
         email.setSubject(field_subject.getText()); // Imposta l'oggetto
         email.setText(field_text.getText());       // Imposta il testo dell'email
 
-        // Qui va il codice per l'invio effettivo dell'email
-        model.sendEmail(email);
         //Dobbiamo fare in modo che quando inviamo l'email al server, se la riceve correttamente il server deve restituire true al contrario se non la riceve correttamente riceve false ,
         //in modo tale da attivare il pop-up nella maniera corretta.
 
