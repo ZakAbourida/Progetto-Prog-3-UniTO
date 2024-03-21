@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class Email implements Serializable {
     private String sender;
@@ -41,7 +38,11 @@ public class Email implements Serializable {
 
     @Override
     public String toString() {
-        return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients + "\n";
+        StringBuilder res = new StringBuilder(sender + ',' + subject + ',' + text + ',' + date + ',');
+        for(int i = 0; i< this.recipients.size(); i++){
+            res.append(recipients.get(i)).append(',');
+        }
+        return res + "\n";
     }
 
     // Getter methods to retrieve values of private variables
@@ -88,5 +89,13 @@ public class Email implements Serializable {
 
     public void setFormat(SimpleDateFormat format) {
         this.format = format;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Email){
+            return Objects.equals(obj.toString(), this.toString());
+        }
+        return false;
     }
 }
