@@ -85,7 +85,6 @@ public class ClientHandler implements Runnable {
             box.writeMailbox(); //TODO better caching and transactions
         }
         serverController.logMessages("Email inviata da: "+request.getEmail());
-        out.writeObject("OK");
     }
     public void handleReceiveEmailRequest(RequestType request) throws IOException {
         Mailbox m = server.getBox(request.getEmail());
@@ -101,7 +100,6 @@ public class ClientHandler implements Runnable {
         m.removeMessage((Email) mail);
         m.writeMailbox();
         serverController.logMessages("Email successfully removed!");
-        out.writeObject("OK");
     }
 
 

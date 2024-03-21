@@ -41,12 +41,9 @@ public class Client {
         try {
             sendRequest(new RequestType(this.email, 2)); // Invia la richiesta al server
             output.writeObject(email); // Invia l'oggetto Email
-            Object response = input.readObject();
-            return response instanceof String && response.equals("OK");
+            return true;
         } catch (IOException e) {
             // Log dell'errore per scopi di debug o di tracciamento
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return false;
@@ -70,7 +67,7 @@ public class Client {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // Attendo la risposta e la gestisco
+        /*
         try {
             Object response = input.readObject();
             if (response instanceof String) {
@@ -81,7 +78,7 @@ public class Client {
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
-        }
+        }*/ //TOOO safe remove
     }
 
     public List<Email> receivedEmail(String address) {
