@@ -22,87 +22,59 @@ public class ClientHandler implements Runnable {
         this.in = new ObjectInputStream(socket.getInputStream());
         this.out = new ObjectOutputStream(socket.getOutputStream());
     }
+
     @Override
     public void run() {
-            try {
-                // Esempio: leggi una linea di testo e inviala indietro al client
+        try {
+            while(true) {
                 // Receive the request from the client
                 Object request = in.readObject();
                 // Manage the request
-                Object response = handleRequest(request);
-                // Send the response to the client
-                out.writeObject(response);
-                serverController.logConnection("Client connesso: ");
-
-                // Pulizia: chiudi gli stream e il socket
-                in.close();
-                out.close();
-                clientSocket.close();
-                serverController.logConnection("Client disconnesso: ");
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Errore nella gestione del client: " + e.getMessage());
-                e.printStackTrace();
+                handleRequest(request);
             }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Errore nella gestione del client: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * System.out.println("Connesso: ");
-     *         while(true){
-     *             try {
-     *                 // Esempio: leggi una linea di testo e inviala indietro al client
-     *                 String line = in.readLine();
-     *                 out.println("Hai detto: " + line);
-     *                 //serverController.logConnection("Client connesso: "+line);
-     *
-     *             } catch (IOException e) {
-     *                 System.out.println("Errore nella gestione del client: " + e.getMessage());
-     *                 e.printStackTrace();
-     *             }
-     *
-     *             try {
-     *                 // Pulizia: chiudi gli stream e il socket
-     *                 in.close();
-     *                 out.close();
-     *                 clientSocket.close();
-     *                 //serverController.logConnection("Client disconnesso: ");
-     *             } catch (IOException e) {
-     *                 System.out.println("Errore nella gestione del client: " + e.getMessage());
-     *                 e.printStackTrace();
-     *             }
-     *         }
-     */
-
-    public Object handleRequest(Object req) throws IOException, ClassNotFoundException {
+    public void handleRequest(Object req) throws IOException, ClassNotFoundException {
         // Verifica se req è un'istanza di RequestType
-        if (!(req instanceof RequestType)) {
+        if (!(req instanceof RequestType richiesta)) {
             throw new IllegalArgumentException("Richiesta non valida");
         }
 
-        RequestType richiesta = (RequestType) req;
-
-        switch(richiesta.getType()) {
-            case 0: // Connection request
-                return handleLoginRequest(richiesta);
+        switch (richiesta.getType()) {
             case 1: // Login request
-                return handleLoginRequest(richiesta);
+                handleLoginRequest(richiesta);
+                break;
             case 2: // Send email request
-                return handleSendEmailRequest(richiesta);
+                handleSendEmailRequest(richiesta);
+                break;
             case 3: // Receive email request
-                return handleReceiveEmailRequest(richiesta);
+                handleReceiveEmailRequest(richiesta);
+                break;
             case 4: // Delete email request
-                return handleDeleteEmailRequest(richiesta);
+                handleDeleteEmailRequest(richiesta);
+                break;
+            case 5:
+                handleCloseConnection(richiesta);
+                break;
             default:
                 throw new IllegalArgumentException("Tipo di richiesta non supportato");
         }
     }
 
-    public RequestType handleLoginRequest(RequestType request) throws IOException {
-        serverController.logConnection("Client connesso: "+request.getEmail());
+    private void handleCloseConnection(RequestType request) {
+        serverController.logMessages("Client disconnesso:" + request.getEmail());
+    }
+
+    public void handleLoginRequest(RequestType request) throws IOException {
+        serverController.logMessages("Client connesso: "+request.getEmail());
         Mailbox m = server.getBox(request.getEmail());
         out.writeObject(m.getMessages());
-        return request;
     }
-    public RequestType handleSendEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
+    public void handleSendEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
         Object mail = in.readObject();
         if (!(mail instanceof Email)){
             throw new IllegalArgumentException("An email is expected after a send request");
@@ -112,21 +84,22 @@ public class ClientHandler implements Runnable {
             box.addMessage((Email) mail);
             box.writeMailbox(); //TODO better caching and transactions
         }
-        return request;
+        serverController.logMessages("Email inviata da: "+request.getEmail());
     }
-    public RequestType handleReceiveEmailRequest(RequestType request) throws IOException {
+    public void handleReceiveEmailRequest(RequestType request) throws IOException {
         Mailbox m = server.getBox(request.getEmail());
+        m.readMailbox();
         out.writeObject(m.getMessages());
-        return  request;
     }
-    public RequestType handleDeleteEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
+    public void handleDeleteEmailRequest(RequestType request) throws IOException, ClassNotFoundException {
         Object mail = in.readObject();
         if (!(mail instanceof Email)){
             throw new IllegalArgumentException("An email is expected after a delete request");
         }
         Mailbox m = server.getBox(request.getEmail());
         m.removeMessage((Email) mail);
-        return request;
+        m.writeMailbox();
+        out.writeObject("Email successfully removed");
     }
 
 

@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class Email implements Serializable {
     private String sender;
@@ -25,12 +22,13 @@ public class Email implements Serializable {
     }
 
     public Email(String line) {
-        String[] parts = line.split(",",5);
+        String[] parts = line.split(",", 5);
         String[] recipients = parts[4].split(",");
         this.recipients = Arrays.stream(recipients).toList();
         this.sender = parts[0];
         this.subject = parts[1];
-        this.text = parts[3];
+        this.text = parts[2];
+        this.date = parts[3];
     }
 
     //costruttore vuoto temporaneo o forse no
@@ -40,7 +38,11 @@ public class Email implements Serializable {
 
     @Override
     public String toString() {
-        return sender + ',' + subject + ',' + text + ',' + date + ',' + recipients;
+        StringBuilder res = new StringBuilder(sender + ',' + subject + ',' + text + ',' + date + ',');
+        for(int i = 0; i< this.recipients.size(); i++){
+            res.append(recipients.get(i)).append(',');
+        }
+        return res + "\n";
     }
 
     // Getter methods to retrieve values of private variables
@@ -61,6 +63,10 @@ public class Email implements Serializable {
         return text;
     }
 
+    public String getDate() {
+        return date;
+    }
+
     public void setSender(String sender) {
         this.sender = sender;
     }
@@ -77,11 +83,19 @@ public class Email implements Serializable {
         this.text = text;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate() {
+        this.date = this.format.format(new Date());
     }
 
     public void setFormat(SimpleDateFormat format) {
         this.format = format;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Email){
+            return Objects.equals(obj.toString(), this.toString());
+        }
+        return false;
     }
 }

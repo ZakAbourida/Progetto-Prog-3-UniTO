@@ -11,12 +11,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.URL;
+import java.util.List;
 
 public class LoginController {
 
@@ -26,9 +28,22 @@ public class LoginController {
     private TextField email_field;
     @FXML
     private Label lbl_error;
+    private ListEmailController listEmailController;
+    private Client model;
+    private LoginController lgn_controller;
 
     public void initialize() {
         btn_login.setOnAction(event -> login());
+        email_field.setOnKeyPressed((keyEvent)-> { //Lambda form EventHandler<KeyEvent>
+            if (keyEvent.getCode().equals(KeyCode.ENTER)){
+                login();
+            }
+        });
+    }
+
+    public void setModel(Client model, LoginController lg) {
+        this.model = model;
+        this.lgn_controller = lg;
     }
 
     private void login() {
@@ -46,26 +61,22 @@ public class LoginController {
 
         // Pulisci l'etichetta dell'errore prima di procedere
         lbl_error.setText("");
-        //crea il tipo di richiesta
-        RequestType type = new RequestType(email,1);
-        // Avvia un nuovo thread per connettersi al server
-        new Thread(() -> connectClient(type)).start();
+
+        //Ask model for login request
+
+        connectClient(email);
     }
 
-    private void connectClient(Object request) {
+    private void connectClient(String address) {
         try {
-            Client client = new Client("localhost", 4040, email_field.getText());
-            client.openConnection();
-            // Send the request to the server
-            Object response = client.sendRequest(request);
-            System.out.println("CONTROLLER LOGIN ==> Il server ha risposto: " + response);
-
-            client.close();
+            List<Email> mailbox = model.sendLogin(address);
+            listEmailController = new ListEmailController();
 
             // Dopo la connessione riuscita, cambia la vista.
             Platform.runLater(() -> {
                 try {
                     switchToEmailListView();
+                    listEmailController.fillReceivedEmail(mailbox);
                 } catch (IOException e) {
                     lbl_error.setText("Impossibile caricare listemail-view.fxml");
                     e.printStackTrace();
@@ -82,10 +93,14 @@ public class LoginController {
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("listemail-view.fxml"));
 
         // Ottiene lo stage corrente (dalla finestra attuale) e imposta la nuova scena
+        fxmlLoader.setController(listEmailController);
+        listEmailController.setListEmailController(fxmlLoader.getController());
         Stage stage = (Stage) btn_login.getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.setTitle(email_field.getText().trim());
         stage.show();
+        listEmailController.setModel(model);
     }
+
 }

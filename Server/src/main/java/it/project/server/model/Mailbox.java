@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Mailbox{
-    private final List<Email> messages;
+    private List<Email> messages;
     private final File fd;
 
     public Mailbox(String emailAccount) throws URISyntaxException, IOException {
@@ -28,6 +28,7 @@ public class Mailbox{
     protected synchronized void readMailbox() throws IOException{
         BufferedReader rd = new BufferedReader(new FileReader(fd));
         String line;
+        messages = new ArrayList<>();
         while((line = rd.readLine()) !=  null){
             Email curr = new Email(line);
             messages.add(curr);

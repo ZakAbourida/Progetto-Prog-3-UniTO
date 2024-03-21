@@ -1,15 +1,16 @@
 package it.project.Client.controller;
 
+import it.project.Client.model.Client;
 import it.project.lib.Email;
+import it.project.lib.RequestType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 public class EmailController {
 
@@ -25,6 +26,14 @@ public class EmailController {
     @FXML
     private TextField field_text;
 
+    private Client model;
+
+    public void setModel(Client model) {
+        this.model = model;
+    }
+    public void setEmailField(String email){this.field_email.setText(email);}
+    public void setSubjectField(String subject){this.field_subject.setText(subject);}
+    public void setTextField(String text){this.field_text.setText(text);}
 
     public void initialize(){
         btn_send.setOnAction(actionEvent -> {sendEmail();});
@@ -47,24 +56,25 @@ public class EmailController {
         email.setText(field_text.getText());       // Imposta il testo dell'email
 
         // Qui va il codice per l'invio effettivo dell'email
-        /**
-         * @todo
-         */
-
+        model.sendEmail(email);
         //Dobbiamo fare in modo che quando inviamo l'email al server, se la riceve correttamente il server deve restituire true al contrario se non la riceve correttamente riceve false ,
         //in modo tale da attivare il pop-up nella maniera corretta.
-        boolean isSent = true; // Simula l'invio dell'email
+
+        boolean isSent = model.sendEmail(email); // Simula l'invio dell'email
 
         if (isSent) {
             // Mostra un Alert di successo se l'email è stata inviata correttamente
-            Alert alert = new Alert(AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Email Inviata");
             alert.setHeaderText(null);
             alert.setContentText("L'email è stata inviata con successo!");
             alert.showAndWait();
+
+            // Chiude lo stage della email dopo che l'alert è stato chiuso
+            ((Stage)field_email.getScene().getWindow()).close();
         } else {
             // Mostra un Alert di errore se l'invio dell'email non è riuscito
-            Alert alert = new Alert(AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Errore Invio Email");
             alert.setHeaderText("Impossibile inviare l'email");
             alert.setContentText("Si è verificato un errore durante l'invio dell'email. Riprova.");
