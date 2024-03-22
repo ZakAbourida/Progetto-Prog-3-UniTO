@@ -70,7 +70,7 @@ public class Server {
         return loadedBoxes.computeIfAbsent(address,
             (key) -> {
                 try {
-                    Mailbox ret = new Mailbox(key);
+                    Mailbox ret = new Mailbox(key,serverController);
                     if(ret.createOrExists()){
                         //logger("new mailbox created with adress" + address + "at:" + new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss").format(new java.util.Date()));
                         System.out.println("mailcreated"); //TODO notify logger

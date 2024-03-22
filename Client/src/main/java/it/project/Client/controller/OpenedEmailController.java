@@ -1,5 +1,6 @@
 package it.project.Client.controller;
 
+import it.project.Client.model.Client;
 import it.project.lib.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -29,6 +30,8 @@ public class OpenedEmailController {
     @FXML
     private Label dateTime_text;
     private ListEmailController lstEmailController;
+
+
 
     public void setListEmailController(ListEmailController lst_controller) {
         this.lstEmailController = lst_controller;

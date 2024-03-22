@@ -2,7 +2,6 @@ package it.project.Client.controller;
 
 import it.project.Client.model.Client;
 import it.project.lib.Email;
-import it.project.lib.RequestType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
