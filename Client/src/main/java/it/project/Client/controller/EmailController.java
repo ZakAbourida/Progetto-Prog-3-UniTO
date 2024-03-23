@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.util.Collections;
 
+/**
+ * Controller per la finestra di composizione e invio di nuove email.
+ */
 public class EmailController {
 
     @FXML
@@ -27,23 +30,64 @@ public class EmailController {
 
     private Client model;
 
+    /**
+     * Imposta il client per questo controller.
+     *
+     * @param model il modello del client
+     */
     public void setModel(Client model) {
         this.model = model;
     }
-    public void setEmailField(String email){this.field_email.setText(email);}
-    public void setSubjectField(String subject){this.field_subject.setText(subject);}
-    public void setTextField(String text){this.field_text.setText(text);}
 
-    public void initialize(){
-        btn_send.setOnAction(actionEvent -> {sendEmail();});
+    /**
+     * Imposta il campo di testo per l'indirizzo email con il valore specificato.
+     *
+     * @param email l'indirizzo email da impostare
+     */
+    public void setEmailField(String email) {
+        this.field_email.setText(email);
     }
 
+    /**
+     * Imposta il campo di testo per l'oggetto dell'email con il valore specificato.
+     *
+     * @param subject l'oggetto dell'email da impostare
+     */
+    public void setSubjectField(String subject) {
+        this.field_subject.setText(subject);
+    }
+
+    /**
+     * Imposta il campo di testo per il testo dell'email con il valore specificato.
+     *
+     * @param text il testo dell'email da impostare
+     */
+    public void setTextField(String text) {
+        this.field_text.setText(text);
+    }
+
+    /**
+     * Metodo per l'inizializzazione del controller e del bottone.
+     */
+    public void initialize() {
+        btn_send.setOnAction(actionEvent -> {
+            sendEmail();
+        });
+    }
+
+    /**
+     * Metodo per l'invio dell'email:
+     * -    Invia l'email utilizzando i dati inseriti nei campi di testo.
+     * -    Mostra un messaggio di errore se uno dei campi è vuoto.
+     * -    Visualizza una finestra di dialogo informativa se l'email viene inviata correttamente
+     * o una finestra di dialogo di errore se l'invio dell'email fallisce.
+     */
     public void sendEmail() {
         if (field_email.getText().isEmpty() || field_subject.getText().isEmpty() || field_text.getText().isEmpty()) {
             Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Errore");
-            alert.setHeaderText("Impossibile inviare l'email");
-            alert.setContentText("Tutti i campi devono essere compilati prima di inviare l'email.");
+            alert.setTitle("Error");
+            alert.setHeaderText("Unable to send the email");
+            alert.setContentText("All fields must be filled out before sending the email.");
             alert.showAndWait();
             return;
         }
@@ -62,19 +106,19 @@ public class EmailController {
         if (isSent) {
             // Mostra un Alert di successo se l'email è stata inviata correttamente
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Email Inviata");
+            alert.setTitle("Email sent!");
             alert.setHeaderText(null);
-            alert.setContentText("L'email è stata inviata con successo!");
+            alert.setContentText("Email succefully sent!");
             alert.showAndWait();
 
             // Chiude lo stage della email dopo che l'alert è stato chiuso
-            ((Stage)field_email.getScene().getWindow()).close();
+            ((Stage) field_email.getScene().getWindow()).close();
         } else {
             // Mostra un Alert di errore se l'invio dell'email non è riuscito
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Errore Invio Email");
-            alert.setHeaderText("Impossibile inviare l'email");
-            alert.setContentText("Si è verificato un errore durante l'invio dell'email. Riprova.");
+            alert.setTitle("Email Sending Error");
+            alert.setHeaderText("Unable to sent the email");
+            alert.setContentText("An error occurred while sending the email. Please try again.");
             alert.showAndWait();
         }
     }

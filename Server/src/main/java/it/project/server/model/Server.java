@@ -1,25 +1,18 @@
 package it.project.server.model;
 
-
 import it.project.server.controller.ServerController;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.*;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-    @FXML
-    private ListView listserver_view;
     private final int port = 4040; // Porta di default
     private ServerSocket serverSocket;
     private final ExecutorService pool;
@@ -27,16 +20,24 @@ public class Server {
     private ServerController serverController = null;
     private final HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
 
-    public void setController(ServerController c){
+    /**
+     * Imposta il controller del server:
+     *
+     * @param c Il controller del server.
+     */
+    public void setController(ServerController c) {
         this.serverController = c;
     }
 
+    /**
+     * Costruttore della classe Server.
+     */
     public Server() {
         this.pool = Executors.newCachedThreadPool();
 
         try {
             startServer();
-        }catch (IOException e){
+        } catch (IOException e) {
             //logError();
         }
         this.running = true;
@@ -59,6 +60,11 @@ public class Server {
         });
     }
 
+    /**
+     * Avvia il server in un nuovo thread.
+     *
+     * @throws IOException se si verifica un errore di I/O durante l'avvio del server.
+     */
     private void startServer() throws IOException {
         new Thread(() -> {
             try {
@@ -66,7 +72,7 @@ public class Server {
                 while (running) {
                     Socket clientSocket = serverSocket.accept();
                     // Gestisci la connessione del client in un thread separato
-                    pool.execute(new ClientHandler(clientSocket, serverController,this));
+                    pool.execute(new ClientHandler(clientSocket, serverController, this));
                 }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -80,6 +86,11 @@ public class Server {
         }).start();
     }
 
+    /**
+     * Arresta il server.
+     *
+     * @throws IOException Se si verifica un errore di I/O durante la chiusura del serverSocket.
+     */
     public void stopServer() throws IOException {
         running = false;
         pool.shutdown(); // Interrompe tutti i thread attivi
@@ -90,46 +101,42 @@ public class Server {
         System.exit(0);
     }
 
+    /**
+     * Verifica se il server è in esecuzione.
+     *
+     * @return True se il server è in esecuzione, altrimenti false.
+     */
     public boolean isRunning() {
         return running;
     }
 
     //Thread accessed functions
-    protected synchronized Mailbox getBox(String address){
-        return loadedBoxes.computeIfAbsent(address,
-            (key) -> {
-                try {
-                    Mailbox ret = new Mailbox(key,serverController);
-                    if(ret.createOrExists()){
-                        //System.out.println("mailcreated");
-                        serverController.logMessages("New Mailbox created:\t" + address);
-                    }
-                    ret.readMailbox();
-                    return ret;
-                } catch (URISyntaxException e) { //TODO crash
-                    //Database fault fs has been tampered with
-                    pool.shutdown();
-                    System.exit(0);
-                } catch (IOException e) { //TODO notify logger
-                    //IO error notify observers
-                    throw new RuntimeException(e);
+
+    /**
+     * Restituisce la mailbox associata all'indirizzo specificato.
+     *
+     * @param address L'indirizzo della mailbox.
+     * @return La mailbox associata all'indirizzo specificato.
+     */
+    protected synchronized Mailbox getBox(String address) {
+        return loadedBoxes.computeIfAbsent(address, (key) -> {
+            try {
+                Mailbox ret = new Mailbox(key, serverController);
+                if (ret.createOrExists()) {
+                    //System.out.println("mailcreated");
+                    serverController.logMessages("New Mailbox created:\t" + address);
                 }
-                return null;
+                ret.readMailbox();
+                return ret;
+            } catch (URISyntaxException e) { //TODO crash
+                //Database fault fs has been tampered with
+                pool.shutdown();
+                System.exit(0);
+            } catch (IOException e) { //TODO notify logger
+                //IO error notify observers
+                throw new RuntimeException(e);
             }
-        );
+            return null;
+        });
     }
-
-    /*private synchronized void logger(String s) {
-        try {
-            File logs = new File(Objects.requireNonNull(Mailbox.class.getResource("logs.txt")).toURI());
-            FileWriter wr = new FileWriter(logs);
-        }catch (URISyntaxException e){
-            //Database fault fs has been tampered with
-            pool.shutdown();
-            System.exit(0);
-        }catch (IOException e){
-            logError();
-        }
-
-    }*/
 }

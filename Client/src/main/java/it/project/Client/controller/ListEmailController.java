@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Controller per la gestione della visualizzazione delle email nella lista.
+ */
 public class ListEmailController {
     @FXML
     private Button btn_newemail;
@@ -30,14 +33,29 @@ public class ListEmailController {
     private OpenedEmailController OpEmailController;
     private ListEmailController lst_em;
 
+    /**
+     * Imposta il client per il controller.
+     *
+     * @param model il modello del client
+     */
     public void setModel(Client model) {
         this.model = model;
     }
 
+    /**
+     * Imposta il controller della finestra della lista delle email.
+     *
+     * @param lg il controller della lista delle email
+     */
     public void setListEmailController(ListEmailController lg) {
         this.lst_em = lg;
     }
 
+    /**
+     * Inizializza il controller.
+     * Configura le azioni dei pulsanti, imposta il comportamento del click sulla lista delle email,
+     * e gestisce la chiusura della finestra tramite il pulsante "X".
+     */
     @FXML
     public void initialize() {
         // Configura l'azione del bottone per creare una nuova email
@@ -76,6 +94,11 @@ public class ListEmailController {
         });
     }
 
+    /**
+     * Apre una finestra per scrivere una nuova email.
+     *
+     * @throws IOException se si verifica un errore durante l'apertura della finestra
+     */
     public void writeEmail() throws IOException {
         // Carica il file FXML per la nuova scena
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("email-view.fxml"));
@@ -93,6 +116,11 @@ public class ListEmailController {
         newStage.show();
     }
 
+    /**
+     * Riempie la ListView con le email ricevute.
+     *
+     * @param response la risposta contenente le email ricevute
+     */
     @FXML
     public void fillReceivedEmail(Object response) {
         if (!(response instanceof List<?>))
@@ -123,6 +151,11 @@ public class ListEmailController {
         }
     }
 
+    /**
+     * Visualizza i dettagli dell'email selezionata.
+     *
+     * @param mouseEvent l'evento del mouse
+     */
     protected void showSelectedEmail(MouseEvent mouseEvent) {
         // Ottieni l'email selezionata dalla ListView
         Email selectedEmail = listview_email.getSelectionModel().getSelectedItem();
@@ -158,6 +191,11 @@ public class ListEmailController {
         }
     }
 
+    /**
+     * Disconnette l'utente e ritorna alla schermata di login.
+     *
+     * @throws IOException se si verifica un errore durante la disconnessione
+     */
     public void Disconnect() throws IOException {
         Stage stage = (Stage) listview_email.getScene().getWindow();
         if (stage != null) { // Verifica se lo Stage è stato inizializzato correttamente
@@ -179,6 +217,13 @@ public class ListEmailController {
         ((LoginController) fxmlLoader.getController()).setModel(client, fxmlLoader.getController());
     }
 
+    /**
+     * Risponde all'email selezionata.
+     *
+     * @param sender  il mittente dell'email
+     * @param subject l'oggetto dell'email
+     * @throws IOException se si verifica un errore durante la risposta all'email
+     */
     public void ReplyEmail(String sender, String subject) throws IOException {
         //apre la finestra per scrivere una nuova email
         writeEmail();
@@ -187,6 +232,14 @@ public class ListEmailController {
         emailController.setSubjectField(subject);
     }
 
+    /**
+     * Inoltra l'email selezionata.
+     *
+     * @param sender  il mittente dell'email
+     * @param subject l'oggetto dell'email
+     * @param text    il testo dell'email
+     * @throws IOException se si verifica un errore durante l'inoltro dell'email
+     */
     public void ForwardEmail(String sender, String subject, String text) throws IOException {
         //apre la finestra per scrivere una nuova email
         writeEmail();
@@ -196,13 +249,14 @@ public class ListEmailController {
         emailController.setTextField(text);
     }
 
+    /**
+     * Aggiorna la ListView con la lista aggiornata delle email.
+     */
     public void UpdateEmail() {
         try {
             // Ottieni l'indirizzo email dal titolo dello stage
             Stage stage = (Stage) listview_email.getScene().getWindow();
             String email = stage.titleProperty().getValue();
-
-
             List<Email> updatedEmails = model.receivedEmail(email); // Utilizza receivedEmail
 
             // Utilizza il metodo fillReceivedEmail per aggiornare la ListView
@@ -213,7 +267,14 @@ public class ListEmailController {
         }
     }
 
-    public void CancelEmail(String sender, String subject, String date) {
+    /**
+     * Cancellazione dell'email selezionata e aggiornamento della casella di posta.
+     *
+     * @param sender  il mittente dell'email
+     * @param subject l'oggetto dell'email
+     * @param date    la data dell'email
+     */
+    public void DeleteEmail(String sender, String subject, String date) {
         boolean found = false;
         for (Email email : listview_email.getItems()) {
             if (email.getSender().equals(sender) && email.getSubject().equals(subject) && email.getDate().equals(date)) {

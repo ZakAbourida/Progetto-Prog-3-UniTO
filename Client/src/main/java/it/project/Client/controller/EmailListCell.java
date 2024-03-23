@@ -7,12 +7,18 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Implementazione personalizzata di ListCell per visualizzare le email nella ListView.
+ */
 class EmailListCell extends ListCell<Email> {
     private final GridPane gridPane = new GridPane();
     private final Label senderLabel = new Label();
     private final Label subjectLabel = new Label();
     private final Label dateLabel = new Label();
 
+    /**
+     * Costruttore della cella della lista delle email.
+     */
     public EmailListCell() {
         super();
         // Imposta l'allineamento della griglia
@@ -32,6 +38,12 @@ class EmailListCell extends ListCell<Email> {
         setGraphic(gridPane);
     }
 
+    /**
+     * Aggiorna l'aspetto della cella in base all'oggetto Email.
+     *
+     * @param item  l'oggetto Email da visualizzare
+     * @param empty true se la cella è vuota, false altrimenti
+     */
     @Override
     protected void updateItem(Email item, boolean empty) {
         super.updateItem(item, empty);

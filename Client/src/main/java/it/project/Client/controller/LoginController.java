@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,12 +15,13 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.net.SocketException;
-import java.net.URL;
 import java.util.List;
 
+/**
+ * Controller per la schermata di accesso.
+ * Gestisce il login dell'utente e il passaggio alla schermata di visualizzazione delle email.
+ */
 public class LoginController {
 
     @FXML
@@ -34,6 +34,11 @@ public class LoginController {
     private Client model;
     private LoginController lgn_controller;
 
+    /**
+     * Inizializza il controller.
+     * Imposta gli eventi per il pulsante di login e il campo di testo dell'email.
+     * Imposta inoltre un gestore per l'evento di chiusura della finestra.
+     */
     public void initialize() {
         btn_login.setOnAction(event -> login());
         email_field.setOnKeyPressed((keyEvent) -> { //Lambda form EventHandler<KeyEvent>
@@ -57,11 +62,21 @@ public class LoginController {
         });
     }
 
+    /**
+     * Imposta il client e il riferimento al controller di login.
+     *
+     * @param model il modello del client
+     * @param lg    il riferimento al controller di login
+     */
     public void setModel(Client model, LoginController lg) {
         this.model = model;
         this.lgn_controller = lg;
     }
 
+    /**
+     * Gestisce l'evento di login dell'utente.
+     * Controlla se l'email inserita è valida e se lo è, fa richiesta per eseguire il login.
+     */
     private void login() {
         String email = email_field.getText().trim();
         if (email.isEmpty()) {
@@ -78,10 +93,15 @@ public class LoginController {
         // Pulisci l'etichetta dell'errore prima di procedere
         lbl_error.setText("");
 
-        //Ask model for login request
+        //richiesta per il login
         connectClient(email);
     }
 
+    /**
+     * Effettua la connessione al server per il login dell'utente.
+     *
+     * @param address l'indirizzo email dell'utente
+     */
     private void connectClient(String address) {
         try {
             List<Email> mailbox = model.sendLogin(address);
@@ -103,6 +123,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * Cambia la vista alla schermata di visualizzazione delle email.
+     *
+     * @throws IOException se si verifica un errore durante il caricamento della nuova schermata
+     */
     private void switchToEmailListView() throws IOException {
         // Carica il file FXML per la nuova scena
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("listemail-view.fxml"));

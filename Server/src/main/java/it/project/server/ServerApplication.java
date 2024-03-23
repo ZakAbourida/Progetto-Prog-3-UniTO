@@ -3,15 +3,16 @@ package it.project.server;
 import it.project.server.model.*;
 import it.project.server.controller.*;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
+/**
+ * Classe principale che avvia l'applicazione del server.
+ * Estende la classe Application di JavaFX per gestire l'avvio e la visualizzazione dell'interfaccia utente del server.
+ */
 public class ServerApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {

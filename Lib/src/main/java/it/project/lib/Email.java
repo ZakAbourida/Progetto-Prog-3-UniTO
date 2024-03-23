@@ -1,8 +1,6 @@
 package it.project.lib;
 
-import java.io.File;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -14,6 +12,14 @@ public class Email implements Serializable {
     private String date;
     SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy H:m:s");
 
+    /**
+     * Costruttore della classe Email.
+     *
+     * @param sender     l'indirizzo email del mittente
+     * @param recipients la lista degli indirizzi email dei destinatari
+     * @param subject    l'oggetto dell'email
+     * @param text       il corpo del messaggio
+     */
     public Email(String sender, List<String> recipients, String subject, String text) {
         this.sender = sender;
         this.recipients = recipients;
@@ -21,9 +27,15 @@ public class Email implements Serializable {
         this.text = text;
     }
 
+    /**
+     * Costruttore della classe Email che prende una riga di testo formattata.
+     *
+     * @param line una riga di testo formattata che rappresenta un'email
+     */
     public Email(String line) {
-        String[] parts = line.split(",", 5);
-        String[] recipients = parts[4].split(",");
+        String[] parts = line.split("_", 5);
+        System.out.println("-->"+parts.length);
+        String[] recipients = parts[4].split("_");
         this.recipients = Arrays.stream(recipients).toList();
         this.sender = parts[0];
         this.subject = parts[1];
@@ -31,21 +43,28 @@ public class Email implements Serializable {
         this.date = parts[3];
     }
 
-    //costruttore vuoto temporaneo o forse no
+    /**
+     * Costruttore vuoto temporaneo.
+     */
     public Email() {
-
     }
 
+    /**
+     * @return una stringa contenente i dettagli dell'email
+     * @Override del metodo toString per ottenere una rappresentazione testuale dell'email.
+     */
     @Override
     public String toString() {
-        StringBuilder res = new StringBuilder(sender + ',' + subject + ',' + text + ',' + date + ',');
-        for(int i = 0; i< this.recipients.size(); i++){
-            res.append(recipients.get(i)).append(',');
+        StringBuilder res = new StringBuilder(sender + '_' + subject + '_' + text + '_' + date + '_');
+        for (int i = 0; i < this.recipients.size(); i++) {
+            res.append(recipients.get(i)).append('_');
         }
         return res + "\n";
     }
 
-    // Getter methods to retrieve values of private variables
+    /**
+     * Metodi getter/setter per recuperare/impostare i valori delle variabili private
+     */
 
     public String getSender() {
         return sender;
@@ -91,11 +110,17 @@ public class Email implements Serializable {
         this.format = format;
     }
 
+    /**
+     * @param obj l'oggetto da confrontare con l'istanza corrente
+     * @return true se i due oggetti sono uguali, altrimenti false
+     * @Override del metodo equals per confrontare due oggetti Email.
+     */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Email){
+        if (obj instanceof Email) {
             return Objects.equals(obj.toString(), this.toString());
         }
         return false;
     }
+
 }
