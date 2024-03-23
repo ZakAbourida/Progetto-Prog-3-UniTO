@@ -49,20 +49,20 @@ public class Mailbox {
         }
         wr.flush();
         wr.close();
-        serverController.logMessages("La mailbox " + fd.getName().replace(".csv", "") + " ha ricevuto un nuovo messaggio!");
+        serverController.logMessages("The mailbox " + fd.getName().replace(".csv", "") + " has received a new message!");
         //serverController.logMessages("Messaggi ricevuti" + messages.size());
     }
 
     protected synchronized void addMessage(Email m) {
         messages.add(m);
-        serverController.logMessages(m.getSender() + " ha inviato una nuova email!");
+        serverController.logMessages(m.getSender() + " sent a new email!");
     }
 
     protected synchronized void removeMessage(Email m) throws IOException {
         // Rimuove l'email dalla lista di messaggi
         messages.remove(m);
 
-        serverController.logMessages(m.getRecipients().toString() + " ha eliminato un'email!");
+        serverController.logMessages(m.getRecipients().toString() + " deleted an email!");
     }
 
     protected synchronized void updateMailbox() throws IOException {
