@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable {
                 handleRequest(request);
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Errore nella gestione del client: " + e.getMessage());
+            System.out.println("Error in managing the client: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -41,7 +41,7 @@ public class ClientHandler implements Runnable {
     public void handleRequest(Object req) throws IOException, ClassNotFoundException {
         // Verifica se req è un'istanza di RequestType
         if (!(req instanceof RequestType richiesta)) {
-            throw new IllegalArgumentException("Richiesta non valida");
+            throw new IllegalArgumentException("Request Not Valid");
         }
 
         switch (richiesta.getType()) {
@@ -61,16 +61,17 @@ public class ClientHandler implements Runnable {
                 handleCloseConnection(richiesta);
                 break;
             default:
-                throw new IllegalArgumentException("Tipo di richiesta non supportato");
+                throw new IllegalArgumentException("Type request not suppoted");
         }
     }
 
     private void handleCloseConnection(RequestType request) {
-        serverController.logMessages("Client disconnesso:" + request.getEmail());
+        if(!(request.getEmail().isBlank()))
+            serverController.logMessages("Client disconnected:\t" + request.getEmail());
     }
 
     public void handleLoginRequest(RequestType request) throws IOException {
-        serverController.logMessages("Client connesso: "+request.getEmail());
+        serverController.logMessages("Client connected:\t"+request.getEmail());
         Mailbox m = server.getBox(request.getEmail());
         out.writeObject(m.getMessages());
     }

@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -27,7 +28,7 @@ public class ListEmailController {
     private Client model;
     private EmailController emailController;
     private OpenedEmailController OpEmailController;
-    private ListEmailController lst_em; // Sé stesso, anche se questa dichiarazione sembra non necessaria
+    private ListEmailController lst_em;
 
     public void setModel(Client model) {
         this.model = model;
@@ -66,17 +67,14 @@ public class ListEmailController {
         // Gestisce la chiusura della finestra tramite il pulsante "X"
         Platform.runLater(() -> {
             Stage stage = (Stage) btn_disconnect.getScene().getWindow();
-            stage.setOnCloseRequest(event -> {
-                try {
-                    Disconnect(); // Chiama il tuo metodo Disconnect
-                } catch (IOException e) {
-                    e.printStackTrace(); // Stampa l'errore o gestiscilo come preferisci
-                    event.consume(); // Opzionale: previene la chiusura della finestra se ci sono problemi nella disconnessione
-                }
-            });
+            if (stage != null) {
+                String email = stage.getTitle();
+                stage.setOnCloseRequest(event -> {
+                    model.close(email);
+                });
+            }
         });
     }
-
 
     public void writeEmail() throws IOException {
         // Carica il file FXML per la nuova scena
@@ -162,8 +160,12 @@ public class ListEmailController {
 
     public void Disconnect() throws IOException {
         Stage stage = (Stage) listview_email.getScene().getWindow();
-        String email = stage.titleProperty().getValue();
-        model.close(email);
+        if (stage != null) { // Verifica se lo Stage è stato inizializzato correttamente
+            String email = stage.getTitle();
+            if (email != null && !email.isEmpty()) { // Verifica che il titolo dello Stage non sia nullo o vuoto
+                model.close(email);
+            }
+        }
         // Carica il file FXML per la nuova scena
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("login-view.fxml"));
 
@@ -178,13 +180,17 @@ public class ListEmailController {
     }
 
     public void ReplyEmail(String sender, String subject) throws IOException {
+        //apre la finestra per scrivere una nuova email
         writeEmail();
+        //imposta come già come prefissati il Sender e l'Oggetto
         emailController.setEmailField(sender);
         emailController.setSubjectField(subject);
     }
 
     public void ForwardEmail(String sender, String subject, String text) throws IOException {
+        //apre la finestra per scrivere una nuova email
         writeEmail();
+        //imposta come già come prefissati il Sender, l'Oggetto e il contenuto con l'aggiunta di "Forwarded - "
         emailController.setEmailField(sender);
         emailController.setSubjectField(subject);
         emailController.setTextField(text);
@@ -214,15 +220,13 @@ public class ListEmailController {
                 // Trovata l'email corrispondente
                 model.cancelEmail(email);
                 found = true;
-                return; // Esce dal ciclo una volta trovata l'email corrispondente
+                break; // Esce dal ciclo una volta trovata l'email corrispondente
             }
         }
         if (found == false)
             System.out.println("Nessuna email corrispondente trovata.");
-        else
-            System.out.println("Email corrispondente trovata.");
-
-        //TODO: FARE REFRESH PER AGGIORNARE LA MAILBOX
+        // Aggiorna subito la lista delle email
+        UpdateEmail();
     }
 
 }

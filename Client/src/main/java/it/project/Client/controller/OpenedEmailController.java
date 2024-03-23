@@ -68,11 +68,22 @@ public class OpenedEmailController {
     }
 
     public void forwardEmail() throws IOException {
-        lstEmailController.ForwardEmail(sender_text.getText(), subject_text.getText(), "Forwarded - \n"+text_area_field.getText());
+        String text = text_area_field.getText();
+        //controlla se l'email è già stata inoltrata o no
+        if (!text.startsWith("Forwarded - ")) {
+            text_area_field.setText("Forwarded - " + text);
+        }
+        lstEmailController.ForwardEmail(sender_text.getText(), subject_text.getText(), text_area_field.getText());
     }
 
+
     public void replyEmail() throws IOException {
-        lstEmailController.ReplyEmail(sender_text.getText(), "Reply to: "+subject_text.getText());
+        String subject = subject_text.getText();
+        //per evitare di continuare ad aggiungere Reply nelle risposte
+        if (!subject.startsWith("Reply - ")) {
+            subject_text.setText("Reply - " + subject);
+        }
+        lstEmailController.ReplyEmail(sender_text.getText(), subject_text.getText());
     }
 
     public void setDetails(String sender, List<String> recipient, String subject, String text, String date) {

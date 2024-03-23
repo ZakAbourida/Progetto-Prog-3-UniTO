@@ -21,15 +21,6 @@ public class ServerApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Server");
         stage.setScene(scene);
-
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent e) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
-
         stage.show();
 
         Server s = new Server();

@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
 public class ServerController {
     private Server model;
@@ -16,33 +17,10 @@ public class ServerController {
     private Button btn_start;
 
 
-    public void setServer(Server s){
+    public void setServer(Server s) {
         this.model = s;
     }
-
-    /*
-    @FXML
-    protected void StartAndStop() {
-        if (server.isRunning()) {
-            try {
-                server.stopServer();
-                listserver_view.getItems().add("Server fermato");
-                btn_start.setText("Start");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            new Thread(() -> {
-                try {
-                    server.startServer();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-            listserver_view.getItems().add("Server avviato sulla porta 12345");
-            btn_start.setText("Stop");
-        }
-    }*/
+    public Stage getStage(){return (Stage) this.listserver_view.getScene().getWindow();}
 
     public void logMessages(String message) {
         Platform.runLater(() -> listserver_view.getItems().add(message));

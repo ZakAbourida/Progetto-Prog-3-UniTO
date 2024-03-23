@@ -4,6 +4,7 @@ import it.project.lib.*;
 import it.project.Client.ApplicationClient;
 import it.project.Client.model.Client;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -34,9 +36,23 @@ public class LoginController {
 
     public void initialize() {
         btn_login.setOnAction(event -> login());
-        email_field.setOnKeyPressed((keyEvent)-> { //Lambda form EventHandler<KeyEvent>
-            if (keyEvent.getCode().equals(KeyCode.ENTER)){
+        email_field.setOnKeyPressed((keyEvent) -> { //Lambda form EventHandler<KeyEvent>
+            if (keyEvent.getCode().equals(KeyCode.ENTER)) {
                 login();
+            }
+        });
+
+        Platform.runLater(() -> {
+            Stage stage = (Stage) btn_login.getScene().getWindow();
+            if (stage != null) {
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent e) {
+                        model.close(email_field.getText());
+                        Platform.exit();
+                        System.exit(0);
+                    }
+                });
             }
         });
     }
@@ -63,7 +79,6 @@ public class LoginController {
         lbl_error.setText("");
 
         //Ask model for login request
-
         connectClient(email);
     }
 

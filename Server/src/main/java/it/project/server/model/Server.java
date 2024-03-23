@@ -2,14 +2,24 @@ package it.project.server.model;
 
 
 import it.project.server.controller.ServerController;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.*;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
+    @FXML
+    private ListView listserver_view;
     private final int port = 4040; // Porta di default
     private ServerSocket serverSocket;
     private final ExecutorService pool;
@@ -30,6 +40,23 @@ public class Server {
             //logError();
         }
         this.running = true;
+
+        // Gestisce la chiusura della finestra tramite il pulsante "X"
+        Platform.runLater(() -> {
+            Stage stage = serverController.getStage();
+            if (stage != null) {
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent e) {
+                        try {
+                            stopServer();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void startServer() throws IOException {
@@ -59,6 +86,8 @@ public class Server {
         if (serverSocket != null) {
             serverSocket.close();
         }
+        Platform.exit();
+        System.exit(0);
     }
 
     public boolean isRunning() {
@@ -72,8 +101,8 @@ public class Server {
                 try {
                     Mailbox ret = new Mailbox(key,serverController);
                     if(ret.createOrExists()){
-                        //logger("new mailbox created with adress" + address + "at:" + new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss").format(new java.util.Date()));
-                        System.out.println("mailcreated"); //TODO notify logger
+                        //System.out.println("mailcreated");
+                        serverController.logMessages("New Mailbox created:\t" + address);
                     }
                     ret.readMailbox();
                     return ret;
