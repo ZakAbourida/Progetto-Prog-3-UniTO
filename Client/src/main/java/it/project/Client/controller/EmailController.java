@@ -87,50 +87,39 @@ public class EmailController {
      */
     public void sendEmail() {
         if (field_email.getText().isEmpty() || field_subject.getText().isEmpty() || field_text.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Unable to send the email");
-            alert.setContentText("All fields must be filled out before sending the email.");
-            alert.showAndWait();
+            showAlert("Error", "Unable to send the email", "All fields must be filled out before sending the email.", Alert.AlertType.ERROR);
             return;
         }
 
-
         List<String> recipients = Arrays.asList(field_email.getText().split("[;,]\\s*"));
-
 
         for (String recipient : recipients) {
             if (!Client.isValidEmail(recipient)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Invalid email address");
-                alert.setContentText("One or more email addresses are invalid. Please ensure they are correct and separated by ';' or ','.");
-                alert.showAndWait();
+                showAlert("Error", "Invalid email address", "One or more email addresses are invalid. Please ensure they are correct and separated by ';' or ','.", Alert.AlertType.ERROR);
                 return;
             }
         }
 
         Email email = new Email();
-        email.setRecipients(recipients); // Imposta i destinatari
-        email.setSubject(field_subject.getText()); // Imposta l'oggetto
-        email.setText(field_text.getText());       // Imposta il testo dell'email
-
+        email.setRecipients(recipients);
+        email.setSubject(field_subject.getText());
+        email.setText(field_text.getText());
 
         boolean isSent = model.sendEmail(email);
 
         if (isSent) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Email Sent!");
-            alert.setHeaderText(null);
-            alert.setContentText("Email successfully sent!");
-            alert.showAndWait();
+            showAlert("Email Sent!", null, "Email successfully sent!", Alert.AlertType.INFORMATION);
             ((Stage) field_email.getScene().getWindow()).close();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Email Sending Error");
-            alert.setHeaderText("Unable to send the email");
-            alert.setContentText("An error occurred while sending the email. Please try again.");
-            alert.showAndWait();
+            showAlert("Email Sending Error", "Unable to send the email", "An error occurred while sending the email. Please try again.", Alert.AlertType.ERROR);
         }
+    }
+
+    private void showAlert(String title, String header, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
