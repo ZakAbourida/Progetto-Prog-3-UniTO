@@ -170,7 +170,6 @@ public class ListEmailController {
             try {
                 root = loader.load();
             } catch (IOException e) {
-                System.out.println("ListEmailController - showSelectedEmail()");
                 e.printStackTrace();
                 return;
             }
@@ -207,7 +206,6 @@ public class ListEmailController {
         // Carica il file FXML per la nuova scena
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationClient.class.getResource("login-view.fxml"));
 
-        //Stage stage = (Stage) btn_disconnect.getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.setTitle("Login");
@@ -284,10 +282,7 @@ public class ListEmailController {
                 break; // Esce dal ciclo una volta trovata l'email corrispondente
             }
         }
-        if (found == false)
-            System.out.println("Nessuna email corrispondente trovata.");
-        // Aggiorna subito la lista delle email
-        UpdateEmail();
+        if (!found) UpdateEmail();
     }
 
 }

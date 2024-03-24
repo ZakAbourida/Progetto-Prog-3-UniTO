@@ -71,7 +71,6 @@ public class Mailbox {
         wr.flush();
         wr.close();
         serverController.logMessages("The mailbox " + fd.getName().replace(".csv", "") + " has received a new message!");
-        //serverController.logMessages("Messaggi ricevuti" + messages.size());
     }
 
     /**

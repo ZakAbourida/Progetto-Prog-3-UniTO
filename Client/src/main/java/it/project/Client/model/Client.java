@@ -103,18 +103,6 @@ public class Client {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        /*
-        try {
-            Object response = input.readObject();
-            if (response instanceof String) {
-                String message = (String) response;
-                System.out.println(message);
-            } else {
-                throw new IllegalArgumentException("Response type not recognized.");
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }*/ //TOOO safe remove
     }
 
     /**
@@ -197,15 +185,13 @@ public class Client {
      * @return true se l'indirizzo email è valido, altrimenti false
      */
     public static boolean isValidEmail(String email) {
-        // Verifica la lunghezza dell'email
+
         if (email.length() > 25) {
             return false;
         }
 
-        // Espressione regolare per verificare la forma dell'email
         String emailRegex = "^[\\w-\\.]+@[\\w-]+\\.(com|it)$";
 
-        // Applica la regex all'email
         Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         return pattern.matcher(email).matches();
     }

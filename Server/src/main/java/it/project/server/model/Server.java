@@ -101,16 +101,7 @@ public class Server {
         System.exit(0);
     }
 
-    /**
-     * Verifica se il server è in esecuzione.
-     *
-     * @return True se il server è in esecuzione, altrimenti false.
-     */
-    public boolean isRunning() {
-        return running;
-    }
 
-    //Thread accessed functions
 
     /**
      * Restituisce la mailbox associata all'indirizzo specificato.
@@ -123,7 +114,6 @@ public class Server {
             try {
                 Mailbox ret = new Mailbox(key, serverController);
                 if (ret.createOrExists()) {
-                    //System.out.println("mailcreated");
                     serverController.logMessages("New Mailbox created:\t" + address);
                 }
                 ret.readMailbox();
