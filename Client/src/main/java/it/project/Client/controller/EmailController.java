@@ -9,7 +9,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller per la finestra di composizione e invio di nuove email.
@@ -84,7 +87,7 @@ public class EmailController {
      */
     public void sendEmail() {
         if (field_email.getText().isEmpty() || field_subject.getText().isEmpty() || field_text.getText().isEmpty()) {
-            Alert alert = new Alert(AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Unable to send the email");
             alert.setContentText("All fields must be filled out before sending the email.");
@@ -92,32 +95,40 @@ public class EmailController {
             return;
         }
 
-        // Crea un nuovo oggetto Email
+
+        List<String> recipients = Arrays.asList(field_email.getText().split("[;,]\\s*"));
+
+
+        for (String recipient : recipients) {
+            if (!Client.isValidEmail(recipient)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid email address");
+                alert.setContentText("One or more email addresses are invalid. Please ensure they are correct and separated by ';' or ','.");
+                alert.showAndWait();
+                return;
+            }
+        }
+
         Email email = new Email();
-        email.setRecipients(Collections.singletonList(field_email.getText())); // Imposta il destinatario
+        email.setRecipients(recipients); // Imposta i destinatari
         email.setSubject(field_subject.getText()); // Imposta l'oggetto
         email.setText(field_text.getText());       // Imposta il testo dell'email
 
-        //Dobbiamo fare in modo che quando inviamo l'email al server, se la riceve correttamente il server deve restituire true al contrario se non la riceve correttamente riceve false ,
-        //in modo tale da attivare il pop-up nella maniera corretta.
 
-        boolean isSent = model.sendEmail(email); // Simula l'invio dell'email
+        boolean isSent = model.sendEmail(email);
 
         if (isSent) {
-            // Mostra un Alert di successo se l'email è stata inviata correttamente
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Email sent!");
+            alert.setTitle("Email Sent!");
             alert.setHeaderText(null);
-            alert.setContentText("Email succefully sent!");
+            alert.setContentText("Email successfully sent!");
             alert.showAndWait();
-
-            // Chiude lo stage della email dopo che l'alert è stato chiuso
             ((Stage) field_email.getScene().getWindow()).close();
         } else {
-            // Mostra un Alert di errore se l'invio dell'email non è riuscito
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Email Sending Error");
-            alert.setHeaderText("Unable to sent the email");
+            alert.setHeaderText("Unable to send the email");
             alert.setContentText("An error occurred while sending the email. Please try again.");
             alert.showAndWait();
         }
