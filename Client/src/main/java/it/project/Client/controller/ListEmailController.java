@@ -282,7 +282,7 @@ public class ListEmailController {
                 break; // Esce dal ciclo una volta trovata l'email corrispondente
             }
         }
-        if (!found) UpdateEmail();
+        if (found) UpdateEmail();
     }
 
 }
