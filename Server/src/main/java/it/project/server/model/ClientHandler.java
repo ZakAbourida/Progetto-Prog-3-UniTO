@@ -124,7 +124,7 @@ public class ClientHandler implements Runnable {
         for (String recipient : ((Email) mail).getRecipients()) {
             Mailbox box = server.getBox(recipient);
             box.addMessage((Email) mail);
-            box.writeMailbox(); //TODO better caching and transactions
+            box.writeMailbox();
         }
     }
 

@@ -14,12 +14,14 @@ public class Mailbox {
     private ServerController serverController;
     private List<Email> messages;
     private final File fd;
+    private String address;
 
     public Mailbox(String emailAccount, ServerController controller) throws URISyntaxException, IOException {
         this.serverController = controller;
         this.messages = new ArrayList<>();
         File dir = new File(Objects.requireNonNull(Mailbox.class.getResource("database")).toURI());
         this.fd = new File(dir.getPath() + "/" + emailAccount + ".csv");
+        this.address = emailAccount;
     }
 
     /**
@@ -93,7 +95,7 @@ public class Mailbox {
         // Rimuove l'email dalla lista di messaggi
         messages.remove(m);
 
-        serverController.logMessages(m.getRecipients().toString() + " deleted an email!");
+        serverController.logMessages(this.address + " deleted an email!");
     }
 
     /**
