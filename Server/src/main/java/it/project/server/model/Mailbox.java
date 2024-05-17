@@ -95,7 +95,7 @@ public class Mailbox {
         // Rimuove l'email dalla lista di messaggi
         messages.remove(m);
 
-        serverController.logMessages(this.address + " deleted an email!");
+        serverController.logMessages(this.address + " deleted an email");
     }
 
     /**

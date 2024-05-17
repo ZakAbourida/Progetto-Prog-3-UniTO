@@ -34,7 +34,6 @@ public class Email implements Serializable {
      */
     public Email(String line) {
         String[] parts = line.split("_", 5);
-        System.out.println("-->"+parts.length);
         String[] recipients = parts[4].split("_");
         this.recipients = Arrays.stream(recipients).toList();
         this.sender = parts[0];
