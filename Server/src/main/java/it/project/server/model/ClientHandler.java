@@ -13,6 +13,7 @@ public class ClientHandler implements Runnable {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private ServerController serverController;
+    private boolean running = true;
 
     /**
      * Costruttore della classe ClientHandler.
@@ -37,7 +38,7 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            while (true) {
+            while (running) {
                 // Receive the request from the client
                 Object request = in.readObject();
                 // Manage the request
@@ -87,9 +88,13 @@ public class ClientHandler implements Runnable {
      *
      * @param request La richiesta di chiusura ricevuta dal client.
      */
-    private void handleCloseConnection(RequestType request) {
+    private void handleCloseConnection(RequestType request) throws IOException {
         if (!(request.getEmail().isBlank()))
             serverController.logMessages("Client disconnected:\t" + request.getEmail());
+        in.close();
+        out.close();
+        clientSocket.close();
+        running = false;
     }
 
     /**
