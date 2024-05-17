@@ -242,7 +242,7 @@ public class ListEmailController {
         //apre la finestra per scrivere una nuova email
         writeEmail();
         //imposta come già come prefissati il Sender, l'Oggetto e il contenuto con l'aggiunta di "Forwarded - "
-        emailController.setEmailField(sender);
+        //emailController.setEmailField(sender);
         emailController.setSubjectField(subject);
         emailController.setTextField(text);
     }
