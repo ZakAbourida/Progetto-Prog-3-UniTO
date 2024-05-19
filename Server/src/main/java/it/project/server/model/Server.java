@@ -2,6 +2,10 @@ package it.project.server.model;
 
 import it.project.server.controller.ServerController;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -19,6 +23,7 @@ public class Server {
     private boolean running = false;
     private ServerController serverController = null;
     private final HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
+    private ListProperty<String> logs;
 
     /**
      * Imposta il controller del server:
@@ -32,14 +37,11 @@ public class Server {
     /**
      * Costruttore della classe Server.
      */
-    public Server() {
+    public Server() throws IOException {
         this.pool = Executors.newCachedThreadPool();
+        this.logs = new SimpleListProperty<>(FXCollections.observableArrayList());
 
-        try {
-            startServer();
-        } catch (IOException e) {
-            //logError();
-        }
+        startServer();
         this.running = true;
 
         // Gestisce la chiusura della finestra tramite il pulsante "X"
@@ -58,6 +60,10 @@ public class Server {
                 });
             }
         });
+    }
+
+    public ListProperty<String> getLogs() {
+        return logs;
     }
 
     /**
@@ -112,21 +118,25 @@ public class Server {
     protected synchronized Mailbox getBox(String address) {
         return loadedBoxes.computeIfAbsent(address, (key) -> {
             try {
-                Mailbox ret = new Mailbox(key, serverController);
+                Mailbox ret = new Mailbox(key, this);
                 if (ret.createOrExists()) {
-                    serverController.logMessages("New Mailbox created:\t" + address);
+                    logMessage("New Mailbox created:\t" + address);
                 }
                 ret.readMailbox();
                 return ret;
-            } catch (URISyntaxException e) { //TODO crash
+            } catch (URISyntaxException e) {
                 //Database fault fs has been tampered with
                 pool.shutdown();
                 System.exit(0);
-            } catch (IOException e) { //TODO notify logger
+            } catch (IOException e) {
                 //IO error notify observers
                 throw new RuntimeException(e);
             }
             return null;
         });
+    }
+
+    protected void logMessage(String log){
+        logs.add(log);
     }
 }

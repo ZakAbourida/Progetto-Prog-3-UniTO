@@ -90,7 +90,7 @@ public class ClientHandler implements Runnable {
      */
     private void handleCloseConnection(RequestType request) throws IOException {
         if (!(request.getEmail().isBlank()))
-            serverController.logMessages("Client disconnected:\t" + request.getEmail());
+            server.logMessage("Client disconnected:\t" + request.getEmail());
         in.close();
         out.close();
         clientSocket.close();
@@ -104,7 +104,7 @@ public class ClientHandler implements Runnable {
      * @throws IOException se si verifica un errore durante la gestione della richiesta di login.
      */
     public void handleLoginRequest(RequestType request) throws IOException {
-        serverController.logMessages("Client connected:\t" + request.getEmail());
+        server.logMessage("Client connected:\t" + request.getEmail());
         Mailbox m = server.getBox(request.getEmail());
         out.writeObject(m.getMessages());
     }
