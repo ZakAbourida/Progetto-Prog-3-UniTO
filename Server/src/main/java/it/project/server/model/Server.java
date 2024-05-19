@@ -10,9 +10,11 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,7 +25,7 @@ public class Server {
     private boolean running = false;
     private ServerController serverController = null;
     private final HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
-    private ListProperty<String> logs;
+    private Logger logger;
 
     /**
      * Imposta il controller del server:
@@ -37,9 +39,15 @@ public class Server {
     /**
      * Costruttore della classe Server.
      */
-    public Server() throws IOException {
+    public Server() throws IOException{
         this.pool = Executors.newCachedThreadPool();
-        this.logs = new SimpleListProperty<>(FXCollections.observableArrayList());
+        try {
+            File logFile = new File(Objects.requireNonNull(Mailbox.class.getResource("database/logs")).toURI());
+            this.logger = new Logger(logFile);
+        }catch (URISyntaxException | IOException e){
+            System.err.println("Unable to start server as database doesn't contain log file");
+            e.printStackTrace();
+        }
 
         startServer();
         this.running = true;
@@ -63,7 +71,7 @@ public class Server {
     }
 
     public ListProperty<String> getLogs() {
-        return logs;
+        return logger.getLogs();
     }
 
     /**
@@ -136,7 +144,7 @@ public class Server {
         });
     }
 
-    protected void logMessage(String log){
-        logs.add(log);
+    protected synchronized void logMessage(String log){
+        logger.addLog(log);
     }
 }
