@@ -61,14 +61,13 @@ public class Client {
         // Filtra i destinatari validi prima di inviare l'email
         email.setRecipients(email.getRecipients().stream().filter(Client::isValidEmail).toList());
         email.setSender(this.email); // Imposta il mittente dell'email
-        email.setDate(); // Imposta la data corrente come data di invio
+        email.setDate();
 
         try {
             sendRequest(new RequestType(this.email, 2)); // Invia la richiesta al server
             output.writeObject(email); // Invia l'oggetto Email
             return true;
         } catch (IOException e) {
-            // Log dell'errore per scopi di debug o di tracciamento
             e.printStackTrace();
         }
         return false;

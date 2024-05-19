@@ -179,8 +179,10 @@ public class ListEmailController {
 
             OpEmailController.setListEmailController(lst_em);
 
+            Stage currentStage = (Stage) listview_email.getScene().getWindow();
+            String account = currentStage.getTitle();
             // Passa le informazioni dell'email al controller della nuova finestra
-            OpEmailController.setDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText(), selectedEmail.getDate());
+            OpEmailController.setDetails(selectedEmail.getSender(), selectedEmail.getRecipients(), selectedEmail.getSubject(), selectedEmail.getText(), selectedEmail.getDate(), account);
 
             // Crea una nuova finestra
             Stage stage = new Stage();

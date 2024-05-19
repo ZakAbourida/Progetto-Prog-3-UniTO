@@ -73,7 +73,7 @@
             <Button fx:id="btn_cancel" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Cancel" />
             <Button fx:id="btn_forward" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Forward" />
             <Button fx:id="btn_reply" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Reply" />
-            <Button fx:id="btn_reply1" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Reply All" />
+            <Button fx:id="btn_reply_all" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Reply All" />
          </children>
          <BorderPane.margin>
             <Insets top="3.0" />

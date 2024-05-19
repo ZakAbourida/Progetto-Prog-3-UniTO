@@ -5,6 +5,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -12,6 +14,7 @@ import java.util.List;
  * Gestisce l'apertura di un'email, la risposta, l'inoltro e l'annullamento dell'email.
  */
 public class OpenedEmailController {
+    public Button btn_reply_all;
     @FXML
     private Label sender_text;
     @FXML
@@ -29,6 +32,7 @@ public class OpenedEmailController {
     @FXML
     private Label dateTime_text;
     private ListEmailController lstEmailController;
+    private String account;
 
     /**
      * Imposta il controller per la lista delle email.
@@ -63,7 +67,15 @@ public class OpenedEmailController {
                 throw new RuntimeException(e);
             }
         });
-        text_area_field.setEditable(false); // così il contenuto sarà READ_ONLY
+        btn_reply_all.setOnAction(actionEvent -> {
+            try {
+                replyAllEmail();
+            } catch (IOException e) {
+                System.out.println("OpenedEmailController - replyEmail()");
+                throw new RuntimeException(e);
+            }
+        });
+        text_area_field.setEditable(false);
     }
 
     /**
@@ -97,11 +109,47 @@ public class OpenedEmailController {
      */
     public void replyEmail() throws IOException {
         String subject = subject_text.getText();
-        //per evitare di continuare ad aggiungere Reply nelle risposte
-        if (!subject.startsWith("Reply - ")) {
-            subject_text.setText("Reply - " + subject);
+        if (subject.startsWith("Reply All - ")) {
+            subject = "Reply - " + subject.substring(11);
+        } else if (!subject.startsWith("Reply - ")) {
+            subject = "Reply - " + subject;
         }
-        lstEmailController.ReplyEmail(sender_text.getText(), subject_text.getText());
+        subject_text.setText(subject);
+
+        lstEmailController.ReplyEmail(sender_text.getText(), subject);
+    }
+
+    /**
+     * Metodo per rispondere all'email a tutti coloro che l'hanno ricevuta (escluso il ricevente che sta rispondendo)
+     * ed al mittente. Aggiunge una marcatura "Reply All".
+     * @throws IOException
+     */
+    public void replyAllEmail() throws IOException {
+        String subject = subject_text.getText();
+
+        if (subject.startsWith("Reply - ")) {
+            subject = "Reply All - " + subject.substring(8);
+        } else if (!subject.startsWith("Reply All - ")) {
+            subject = "Reply All - " + subject;
+        }
+        subject_text.setText(subject);
+
+        String sender = sender_text.getText();
+        String[] recipientsArray = receiver_text.getText().split("\\| ");
+
+        List<String> recipientsList = new ArrayList<>(Arrays.asList(recipientsArray));
+        recipientsList.remove(account);
+
+        String recipients = String.join(", ", recipientsList);
+
+
+        if (!recipients.isEmpty()) {
+            recipients += ", " + sender;
+        } else {
+            recipients = sender;
+        }
+
+        lstEmailController.ReplyEmail(recipients, subject);
     }
 
     /**
@@ -113,11 +161,12 @@ public class OpenedEmailController {
      * @param text      il testo dell'email
      * @param date      la data di invio dell'email
      */
-    public void setDetails(String sender, List<String> recipient, String subject, String text, String date) {
+    public void setDetails(String sender, List<String> recipient, String subject, String text, String date,String Acc) {
         sender_text.setText(sender);
         receiver_text.setText(String.join("| ", recipient)); /* conversione lista stringhe in una stringa divisa da '|'*/
         subject_text.setText(subject);
         text_area_field.setText(text);
         dateTime_text.setText(date);
+        account = Acc;
     }
 }
