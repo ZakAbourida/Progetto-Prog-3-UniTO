@@ -28,6 +28,7 @@ public class ServerController {
      */
     public void setServer(Server s) {
         this.model = s;
+        listserver_view.itemsProperty().bind(model.getLogs());
     }
 
     /**
@@ -37,15 +38,5 @@ public class ServerController {
      */
     public Stage getStage() {
         return (Stage) this.listserver_view.getScene().getWindow();
-    }
-
-    /**
-     * Aggiunge un messaggio alla lista dei messaggi del server.
-     * Questo metodo viene eseguito sul thread di JavaFX per garantire la sicurezza dei thread.
-     *
-     * @param message Il messaggio da aggiungere alla lista dei messaggi del server.
-     */
-    public void logMessages(String message) {
-        Platform.runLater(() -> listserver_view.getItems().add(message));
     }
 }

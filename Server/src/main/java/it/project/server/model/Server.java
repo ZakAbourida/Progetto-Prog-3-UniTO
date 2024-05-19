@@ -2,13 +2,19 @@ package it.project.server.model;
 
 import it.project.server.controller.ServerController;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,6 +25,7 @@ public class Server {
     private boolean running = false;
     private ServerController serverController = null;
     private final HashMap<String, Mailbox> loadedBoxes = new HashMap<>();
+    private Logger logger;
 
     /**
      * Imposta il controller del server:
@@ -32,14 +39,17 @@ public class Server {
     /**
      * Costruttore della classe Server.
      */
-    public Server() {
+    public Server() throws IOException{
         this.pool = Executors.newCachedThreadPool();
-
         try {
-            startServer();
-        } catch (IOException e) {
-            //logError();
+            File logFile = new File(Objects.requireNonNull(Mailbox.class.getResource("database/logs")).toURI());
+            this.logger = new Logger(logFile);
+        }catch (URISyntaxException | IOException e){
+            System.err.println("Unable to start server as database doesn't contain log file");
+            e.printStackTrace();
         }
+
+        startServer();
         this.running = true;
 
         // Gestisce la chiusura della finestra tramite il pulsante "X"
@@ -58,6 +68,10 @@ public class Server {
                 });
             }
         });
+    }
+
+    public ListProperty<String> getLogs() {
+        return logger.getLogs();
     }
 
     /**
@@ -112,21 +126,25 @@ public class Server {
     protected synchronized Mailbox getBox(String address) {
         return loadedBoxes.computeIfAbsent(address, (key) -> {
             try {
-                Mailbox ret = new Mailbox(key, serverController);
+                Mailbox ret = new Mailbox(key, this);
                 if (ret.createOrExists()) {
-                    serverController.logMessages("New Mailbox created:\t" + address);
+                    logMessage("New Mailbox created:\t" + address);
                 }
                 ret.readMailbox();
                 return ret;
-            } catch (URISyntaxException e) { //TODO crash
+            } catch (URISyntaxException e) {
                 //Database fault fs has been tampered with
                 pool.shutdown();
                 System.exit(0);
-            } catch (IOException e) { //TODO notify logger
+            } catch (IOException e) {
                 //IO error notify observers
                 throw new RuntimeException(e);
             }
             return null;
         });
+    }
+
+    protected synchronized void logMessage(String log){
+        logger.addLog(log);
     }
 }

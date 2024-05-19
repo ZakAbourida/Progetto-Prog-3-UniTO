@@ -11,13 +11,13 @@ import java.util.Objects;
 
 public class Mailbox {
 
-    private ServerController serverController;
+    private Server server;
     private List<Email> messages;
     private final File fd;
     private String address;
 
-    public Mailbox(String emailAccount, ServerController controller) throws URISyntaxException, IOException {
-        this.serverController = controller;
+    public Mailbox(String emailAccount, Server server) throws URISyntaxException, IOException {
+        this.server = server;
         this.messages = new ArrayList<>();
         File dir = new File(Objects.requireNonNull(Mailbox.class.getResource("database")).toURI());
         this.fd = new File(dir.getPath() + "/" + emailAccount + ".csv");
@@ -72,7 +72,7 @@ public class Mailbox {
         }
         wr.flush();
         wr.close();
-        serverController.logMessages("The mailbox " + fd.getName().replace(".csv", "") + " has received a new message!");
+        server.logMessage("The mailbox " + fd.getName().replace(".csv", "") + " has received a new message!");
     }
 
     /**
@@ -82,7 +82,7 @@ public class Mailbox {
      */
     protected synchronized void addMessage(Email m) {
         messages.add(m);
-        serverController.logMessages(m.getSender() + " sent a new email!");
+        server.logMessage(m.getSender() + " sent a new email!");
     }
 
     /**
@@ -95,7 +95,7 @@ public class Mailbox {
         // Rimuove l'email dalla lista di messaggi
         messages.remove(m);
 
-        serverController.logMessages(this.address + " deleted an email");
+        server.logMessage(this.address + " deleted an email");
     }
 
     /**
