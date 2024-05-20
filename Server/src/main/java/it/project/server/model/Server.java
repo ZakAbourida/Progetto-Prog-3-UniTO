@@ -145,6 +145,6 @@ public class Server {
     }
 
     protected synchronized void logMessage(String log){
-        logger.addLog(log);
+        Platform.runLater(() -> logger.addLog(log));
     }
 }

@@ -13,7 +13,6 @@ public class ClientHandler implements Runnable {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private ServerController serverController;
-    private boolean running = true;
 
     /**
      * Costruttore della classe ClientHandler.
@@ -38,13 +37,12 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            while (running) {
-                // Receive the request from the client
-                Object request = in.readObject();
-                // Manage the request
-                handleRequest(request);
-            }
-        } catch (IOException | ClassNotFoundException e) {
+            // Receive the request from the client
+            Object request = in.readObject();
+            // Manage the request
+            handleRequest(request);
+        }catch (EOFException ignored){}
+        catch (IOException | ClassNotFoundException e) {
             System.out.println("Error in managing the client: " + e.getMessage());
             e.printStackTrace();
         }
@@ -94,7 +92,6 @@ public class ClientHandler implements Runnable {
         in.close();
         out.close();
         clientSocket.close();
-        running = false;
     }
 
     /**
