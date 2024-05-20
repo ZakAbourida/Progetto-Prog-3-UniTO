@@ -53,7 +53,7 @@ public class LoginController {
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent e) {
-                        model.close(email_field.getText());
+                        model.sendDisconect();
                         Platform.exit();
                         System.exit(0);
                     }

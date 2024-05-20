@@ -44,6 +44,7 @@ public class Client {
      */
     private void sendRequest(Object request) {
         try {
+            openConnection("127.0.0.1",4040);
             // Invia la richiesta al server
             output.writeObject(request);
         } catch (NullPointerException | IOException e) {
@@ -69,6 +70,8 @@ public class Client {
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            close();
         }
         return false;
     }
@@ -87,6 +90,8 @@ public class Client {
             return (List<Email>) response;
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }finally {
+            close();
         }
     }
 
@@ -101,7 +106,15 @@ public class Client {
             output.writeObject(email);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }finally {
+            close();
         }
+
+    }
+
+    public void sendDisconect(){
+        sendRequest(new RequestType(email,5));
+        close();
     }
 
     /**
@@ -131,6 +144,8 @@ public class Client {
         } catch (IOException | ClassNotFoundException e) {
             // Combina la gestione di IOException e ClassNotFoundException
             throw new RuntimeException("Error occurred while receiving emails.", e);
+        }finally {
+            close();
         }
     }
 
@@ -156,11 +171,9 @@ public class Client {
      * Chiude la connessione con il server.
      * Prima di chiudere la connessione, invia una richiesta di chiusura al server.
      *
-     * @param email l'indirizzo email del cliente
      */
-    public void close(String email) {
+    public void close() {
         try {
-            sendRequest(new RequestType(email, 5));
             if (socket != null) {
                 socket.close();
             }
