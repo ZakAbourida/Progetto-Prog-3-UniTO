@@ -88,7 +88,7 @@ public class ListEmailController {
             if (stage != null) {
                 String email = stage.getTitle();
                 stage.setOnCloseRequest(event -> {
-                    model.sendDisconect();
+                    model.sendDisconnect();
                 });
             }
         });
@@ -202,7 +202,7 @@ public class ListEmailController {
         if (stage != null) { // Verifica se lo Stage è stato inizializzato correttamente
             String email = stage.getTitle();
             if (email != null && !email.isEmpty()) { // Verifica che il titolo dello Stage non sia nullo o vuoto
-                model.sendDisconect();
+                model.sendDisconnect();
             }
         }
         // Carica il file FXML per la nuova scena

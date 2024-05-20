@@ -119,9 +119,13 @@ public class ClientHandler implements Runnable {
             throw new IllegalArgumentException("An email is expected after a send request");
         }
         for (String recipient : ((Email) mail).getRecipients()) {
-            Mailbox box = server.getBox(recipient);
-            box.addMessage((Email) mail);
-            box.writeMailbox();
+            if(Mailbox.exists(recipient)) {
+                Mailbox box = server.getBox(recipient);
+                box.addMessage((Email) mail);
+                box.writeMailbox();
+            }else{
+                server.logMessage("An email has been sent to " + recipient + " not existent");
+            }
         }
     }
 

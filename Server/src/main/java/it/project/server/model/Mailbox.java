@@ -24,6 +24,15 @@ public class Mailbox {
         this.address = emailAccount;
     }
 
+    public static boolean exists(String recipient) {
+        try {
+            File dir = new File(Objects.requireNonNull(Mailbox.class.getResource("database")).toURI());
+            File fd = new File(dir.getPath() + "/" + recipient + ".csv");
+            return fd.exists();
+        }catch (URISyntaxException ignored){}
+        return false;
+    }
+
     /**
      * Restituisce la lista dei messaggi presenti nella casella di posta.
      *

@@ -112,7 +112,7 @@ public class Client {
 
     }
 
-    public void sendDisconect(){
+    public void sendDisconnect(){
         sendRequest(new RequestType(email,5));
         close();
     }

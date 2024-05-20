@@ -53,7 +53,7 @@ public class LoginController {
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent e) {
-                        model.sendDisconect();
+                        model.sendDisconnect();
                         Platform.exit();
                         System.exit(0);
                     }
