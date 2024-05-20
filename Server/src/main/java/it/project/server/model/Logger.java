@@ -21,6 +21,8 @@ public class Logger {
         this.logs = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.fd = logFile;
         append_writer = new FileWriter(this.fd,true);
+        append_writer.write("New server execution started:\n");
+        append_writer.flush();
     }
 
     public ListProperty<String> getLogs() {
